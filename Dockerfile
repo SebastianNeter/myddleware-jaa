@@ -29,6 +29,14 @@ RUN node --version
 
 COPY --chown=www-data:www-data . .
 
+# Patch Symfony 6.4: Request::HEADER_X_FORWARDED_ALL removed in newer versions
+RUN set -eux; \
+  f=/var/www/html/public/index.php; \
+  if [ -f "$f" ]; then \
+    sed -i "s/Request::HEADER_X_FORWARDED_ALL \^ Request::HEADER_X_FORWARDED_HOST/Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PROTO | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PREFIX/g" "$f"; \
+    grep -n "HEADER_X_FORWARDED_ALL" "$f" && (echo "ERROR: HEADER_X_FORWARDED_ALL still present"; exit 1) || true; \
+  fi
+
 # Build packages with yarn
 RUN yarn install
 RUN yarn run build

@@ -134,3 +134,13 @@ composer.phar
 delete-cache-logs-myddleware.ps1
 /.env.test
 tests/Solutions/ids-to-delete.json
+
+# --- JAA local / ops (DO NOT COMMIT) ---
+.env
+*.sql
+backup_*.sql
+*.bak
+Dockerfile.bak*
+docker-compose.yml.bak*
+public/*.bak*
+public/*.hostbak*
