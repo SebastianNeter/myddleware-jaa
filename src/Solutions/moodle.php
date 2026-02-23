@@ -604,15 +604,6 @@ class moodle extends solution
     // Si la règle n'est qu'en création, pas en modicication alors le mode est C
     public function getRuleMode($module, $type): array
     {
-        if (
-                'target' == $type
-            && in_array($module, ['groups'])
-        ) { // Si le module est dans le tableau alors c'est uniquement de la création
-            return [
-                'C' => 'create_only',
-            ];
-        }
-
         return parent::getRuleMode($module, $type);
     }
 
