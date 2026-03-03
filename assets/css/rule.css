@@ -1,0 +1,1035 @@
+/*********************************************************************************
+ * This file is part of Myddleware.
+
+ * @package Myddleware
+ * @copyright Copyright (C) 2013 - 2015  Stéphane Faure - CRMconsult EURL
+ * @copyright Copyright (C) 2015 - 2016  Stéphane Faure - Myddleware ltd - contact@myddleware.com
+ * @link http://www.myddleware.com	
+ 
+ This file is part of Myddleware.
+ 
+ Myddleware is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Myddleware is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Myddleware.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************************/
+
+#rule .onoffswitch {
+	position: relative;
+	width: 74px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	margin: auto;
+}
+#rule .onoffswitch-checkbox {
+	display: none;
+}
+#rule .onoffswitch-label {
+	display: block;
+	overflow: hidden;
+	cursor: pointer;
+	border: 0px solid #999999;
+	border-radius: 0px;
+}
+#rule .onoffswitch-inner {
+	display: block;
+	width: 200%;
+	margin-left: -100%;
+	-moz-transition: margin 0.3s ease-in 0s;
+	-webkit-transition: margin 0.3s ease-in 0s;
+	-o-transition: margin 0.3s ease-in 0s;
+	transition: margin 0.3s ease-in 0s;
+}
+#rule .onoffswitch-inner > span {
+	display: block;
+	float: left;
+	position: relative;
+	width: 50%;
+	height: 16px;
+	padding: 0;
+	line-height: 16px;
+	font-size: 12px;
+	color: white;
+	font-family: Trebuchet, Arial, sans-serif;
+	font-weight: bold;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+#rule .onoffswitch-inner .onoffswitch-active {
+	padding-left: 11px;
+	background-color: #EEEEEE;
+	color: #FFFFFF;
+}
+#rule .onoffswitch-inner .onoffswitch-inactive {
+	padding-right: 11px;
+	background-color: #EEEEEE;
+	color: #FFFFFF;
+	text-align: right;
+}
+#rule .onoffswitch-switch {
+	display: block;
+	width: 31px;
+	margin: 0px;
+	text-align: center;
+	border: 0px solid #999999;
+	border-radius: 10px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+}
+#rule .onoffswitch-active .onoffswitch-switch {
+	background: #198BCA;
+	left: 0;
+}
+#rule .onoffswitch-inactive .onoffswitch-switch {
+	background: #555555;
+	right: 0;
+}
+#rule .onoffswitch-active .onoffswitch-switch:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 31px;
+	border-width: 8px 7px;
+}
+#rule .onoffswitch-inactive .onoffswitch-switch:before {
+	content: " ";
+	position: absolute;
+	top: 0;
+	right: 31px;
+	border-width: 8px 7px;
+}
+
+#rule .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+	margin-left: 0;
+}
+
+
+#rule th, #connector th, #jobscheduler th, #workflowTableContainer th, #rulegroups th, #crontabList th {
+	background: #ffffff;
+	height: 45px;
+	padding: 20px;
+	text-align: center;
+}
+
+#rule tr, #connector tr, #jobscheduler tr, #workflowTableContainer tr, #rulegroups tr, #crontabList tr {
+	border-bottom: 1px solid #ccc;	
+}
+
+#rule td.lft > a, #connector td.lft > a, #jobscheduler td.lft > a, #workflowTableContainer td.lft > a, #rulegroups td.lft > a, #crontabList td.lft > a{
+	color: black;
+}
+
+#rule .vignette, #connector .vignette, #jobscheduler .vignette {
+	width: 50px;
+}
+
+/* relate */
+
+#rule_mapping #relation #relate input.title {
+	border: none;
+	min-width: 250px;
+}
+
+/*  fields mapping */
+
+.source { 
+	min-width: 10vw;
+	width: 15vw;
+	margin-right: 2em; 
+	overflow:hidden; 
+}
+
+.source, #cible {
+	padding-top:10px;
+	
+}
+
+.source h1, #cible h1 { padding: .2em; margin: 0; }
+
+.source li:hover, #cible ol:hover { cursor:move }
+
+#cible {
+	min-width: 600px;
+	max-width: 78vw;
+	overflow: auto;
+}
+
+#cible .champs {
+	width: 260px;
+	margin: 3px;
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+#cible ul li {
+	color:#4297D7;
+}
+
+#cible .ui-widget-header {
+    background: none repeat scroll 0 0 #198BCA;
+    border: 0px;
+	color: #eee;
+    font-weight: bold;
+    text-align: center;
+    line-height: 2.5em;
+    word-wrap: break-word;
+}
+.icon-white-formula{
+	color: #eee !important;
+	}
+
+#cible .ch, #cible .placeholder {
+	list-style:none;
+	font-weight: bold!important;
+	background-color: #FFFFFF!important; 
+	cursor: pointer!important;
+}
+
+#cible .ch {
+	border-bottom: 1px solid #cccccc;
+    border-width: 1px 10px 1px 1px;
+    line-height: 2em;
+    margin-right: 5px;	
+}
+
+.source .ui-accordion-content {
+	padding:0px;
+	border:none;	
+}
+
+.source ul {
+	list-style:none;
+	padding-left:0px;
+}
+
+
+.source .ui-state-active, .source .ui-widget-content .ui-state-active, .source .ui-widget-header .ui-state-active,
+.source .ui-state-default, .source .ui-widget-content .ui-state-default, .source .ui-widget-header .ui-state-default {
+	background:#EDEDED;	
+	border:none;	
+}
+
+
+.source h2, .source .h2 {
+	font-size: 1em;
+}
+
+#rule .ui-widget-content, #cible .ui-widget-content {
+	border: none;
+}
+
+#cible .ui-widget-content {
+	height: 150px;
+	overflow: auto;	
+}
+
+.catalog-list {
+	max-height: 80vh;
+}
+
+#targetfields {
+	max-height: 110vh;
+	overflow-y:auto;
+	background: #ffffff;
+}
+
+#targetfields ol, #targetfields ul {
+	padding-left: 5px;
+	list-style: none outside none;
+}
+
+#targetfields p {
+	padding-bottom: 10px;	
+	padding-left: 25px;
+}
+
+#cible h1.title {
+	color: #444446;
+	font-size: 1.3em;
+}
+
+/* formula */
+
+#formule .listarea {
+	min-height: 150px;
+}
+
+#formule #functions {
+	display: inline-block;
+	height: 180px;
+	max-height: 180px;
+	overflow-y: scroll;
+}
+
+#formule #functions .tooltip {
+	position: relative;
+	opacity: inherit;
+	cursor: pointer;
+	text-decoration:none;
+}
+
+#formule #filter {
+	height: 30px;
+}
+
+#formule #area_insert, #formule #area_color {
+	height: 225px;
+	padding: 10px;
+	max-height: 225px;
+	overflow:scroll;	
+}
+
+#formule #area_insert {
+	width: 250px;
+}
+
+#formule #area_color {
+	min-width: 350px;
+	width: 350px;
+}
+
+#formule .wdh, #formule #filter, #formule .listarea {
+    max-width: 300px;
+    width: 300px;
+}
+
+#formule .formule_text {
+	list-style-type:none;
+}
+
+/* simulate */
+
+#simulation .middle {
+	width:50%;
+}
+
+#simulation #warning {
+	width: 400px;
+}
+
+#simulation #validation_simulation {
+	line-height: 2.5em;
+	text-align: center;
+}
+/* #validation{
+	color: red;
+} */
+
+#simulation #simulation_tab li {
+    border-bottom: 1px solid #ccc;
+    min-height: 40px auto;
+    list-style: none outside none;
+    padding-top: 10px;
+}
+
+#relation th {
+	background:none;
+}
+
+#relation td {
+	padding: 20px;
+}
+
+#relation td.title {
+	font-weight: bold;
+	text-align: center;
+}
+
+#relation tr {
+	border: none;
+	height: 60px;
+}
+
+#fieldsfilter span {
+	color: #0F66A9;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#fieldsfilter li, #viewfilters li {
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ccc;	
+	list-style:none;
+}
+
+
+.filter-input {
+	width: 545px;
+	max-width: 545px;
+	margin-right: 10px;
+}
+
+#rule .tabs ul.ui-widget-header li {
+	min-width: calc( (1200px / 5) + 1.8px );
+	max-width: calc( (1200px / 5) + 1.8px );
+}
+
+/* filtres */
+
+#viewfilters span {
+	margin: 0px 20px;
+}
+
+#viewfilters .target, #viewfilters .value {
+	font-weight: bold;
+	font-size: 1.2em;
+		
+}
+
+#viewfilters .target {
+	color: #0F66A9;
+    display: inline-block;
+    min-width: 350px;
+}
+
+#viewfilters .value {
+	color: #0F66A9;
+	font-size: 1em;
+}
+
+/* correction tabs */
+
+#catalog .ui-state-default, #catalog .ui-widget-content .ui-state-default, #catalog .ui-widget-header .ui-state-default { 
+	border-right: 0px;
+	border-left: 0px;	
+	background: none;
+	padding: none;
+}
+
+#targetfields .ui-state-default {
+	border: 0em !important;
+	background: #E2E2E2;
+}
+
+#cible .ui-state-default .placeholder {
+	color: #404042;
+}
+
+
+
+#rule #mapping .fields {
+	word-wrap: break-word;
+}
+
+#rule .tabs .ui-state-default, #rule .tabs .ui-widget-content .ui-state-default, #rule .tabs .ui-widget-header .ui-state-default,
+#rule_mapping .tabs .ui-state-default, #rule_mapping .tabs .ui-widget-content .ui-state-default, #rule_mapping .tabs .ui-widget-header .ui-state-default {
+	padding-top: 23px;	
+	font-size: 0.8em;	
+}
+
+/* Button "help" création de règle */
+.link-help {
+	position: relative;
+	top: -100px;
+	font-size: 1.2em;
+	margin-top: 25px;
+	margin-right: 25px;
+}
+
+.link-help-view {
+	font-size: 1.2em;
+}
+
+.link-help > a, .link-help-view > a {
+	color: #0069b4;
+}
+
+.link-help > a:hover, .link-help-view > a:hover  {
+	color: #38a9ff;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.help-content > h2, .help-content > p{
+	width: 80%;
+	margin: auto;
+}
+
+#simulate_list .value {
+	font-size: 0.9em;
+	color: #0069b4;	
+}
+
+#rule_mapping .rule_arrow_left {
+	margin-left: 25px;
+}
+
+#rule_mapping .rule_arrow_right {
+	margin-right: 25px;
+}
+
+#rule_mapping .rule_arrow_left:hover, #rule_mapping .rule_arrow_right:hover {
+	cursor: pointer;
+}
+
+/* Rule edit / view nav menu */
+.nav-link {
+	color: #4f4f4f!important;
+}
+
+.nav-link.active {
+color: #03c4eb!important; 
+}
+
+/* #ruleInfoTabs, #ruleConfigTabs, #connectorCreateTabs, #connectorTabs {
+	box-shadow: rgb(248 249 249) 0px -5px 9px -4px inset, rgba(255, 255, 256, 14.5) 20px 1px 2px 0px inset;
+} */
+
+.fancybox {
+	text-decoration: none!important;
+}
+
+.mapping-container {
+	justify-content: center !important;
+}
+
+.mapping-container > .mapping-card {
+	margin: 30px;
+}
+
+#rulenamesearchbar {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    transition: all 0.5s;
+    max-width: 400px;
+    position: relative;
+}
+
+#rule_name{
+	padding: 5px;
+	padding-top: 15px !important;
+}
+
+.container_filter_step3{
+	max-width: 1449px;
+}
+
+.form-switch .form-check-input:checked {
+	background-color:  #198BCA !important;
+	border-block-color: #198BCA !important;
+	border-color: #198BCA !important;
+}
+
+.workflow_status.form-check-input:checked {
+    margin-left: 7px !important;
+}
+
+.workflow_status.form-check-input {
+    margin-left: 7px !important;
+}
+
+.tooltip-icon {
+    position: absolute;
+    bottom: 10px;
+    right: 10px; 
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: #0F66A9;
+}
+
+.tooltip-icon i {
+    font-size: 1.5rem;
+}
+
+.tooltip-icon:hover {
+    color: #0c4978; 
+}
+
+.comment-box {
+	z-index: 9999;
+    display: none;
+    position: absolute;
+    bottom: -76px;
+    right: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    width: 200px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.comment-box::before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #f1f1f1;
+}
+
+.comment-box .comment-text {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+.comment-box .close-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #dc3545;
+}
+
+.comment-box .close-icon:hover {
+    color: #bb2d3b; 
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+}
+
+.comment-outside {
+    display: none;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 0.85rem;
+    color: #333;
+    z-index: 1000;
+}
+
+.mapping-card-body:hover .comment-outside {
+    display: block;
+}
+
+.mapping-card-body {
+	display: flex;
+	flex-direction: column;
+}
+
+.edit-button-name-list{
+opacity: 0%;
+}
+
+.col-rule-name:hover .edit-button-name-list{
+	opacity: 100%;
+}
+
+.all-link:hover {
+    color: #0a58ca;
+}
+
+.all-link::after {
+    background-color: #0a58ca;
+}
+
+#deletion-rule-tr-deletion {
+	border-bottom: none !important;
+	border-bottom-width: 0px !important;
+}
+
+#deletion-rule-left-deletion {
+	border-bottom: none !important;
+}
+
+#deletion-rule-right-deletion {
+	border-bottom: none !important;
+}
+
+#deletion-rule-tr-description {
+	border-bottom: none !important;
+}
+
+#deletion-rule-right-description {
+	border-bottom: none !important;
+	max-width: 50px;
+}
+
+#deletion-rule-left-description {
+	border-bottom: none !important;
+	vertical-align: top;
+}
+
+.inner-table-workflow {
+	padding: 0px 0px !important;
+}
+
+.name-connector-fit-box {
+	min-width: fit-content;
+}
+
+.link-fit-workflow-name,
+.link-fit-rule-name {
+    display: inline;
+    width: fit-content;
+    white-space: normal;
+    word-break: break-word;
+    text-decoration: none;
+    background: 
+        linear-gradient(currentColor, currentColor) 
+        0 100% 
+        no-repeat;
+    background-size: 0% 2px;
+    transition: background-size 0.2s;
+    padding-bottom: 2px;
+}
+
+.link-fit-workflow-name:hover,
+.link-fit-rule-name:hover {
+    text-decoration: none;
+    background-size: 100% 2px;
+}
+
+/* Remove any previous hover styles */
+.link-fit-workflow-name:hover::after,
+.link-fit-rule-name:hover::after {
+    display: none;
+}
+
+/* Add specific styles for the table cell to handle wrapping */
+td .link-fit-workflow-name,
+td .link-fit-rule-name {
+    display: inline;
+    line-height: 1.5;  /* Adjust line spacing */
+}
+
+.form-floating > #rule_name_label::after,
+.form-floating > .form-control:focus ~ #rule_name_label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ #rule_name_label::after {
+    inset: 0px !important;
+    /* Add any other styles you want to override */
+}
+
+#rulenamesearchbar .form-floating > #workflow_name_label::after,
+#rulenamesearchbar .form-floating > .form-control:focus ~ #workflow_name_label::after,
+#rulenamesearchbar .form-floating > .form-control:not(:placeholder-shown) ~ #workflow_name_label::after {
+    inset: 0px !important;
+}
+.form-floating > #workflow_name_label::after,
+.form-floating > .form-control:focus ~ #workflow_name_label::after,
+.form-floating > .form-control:not(:placeholder-shown) ~ #workflow_name_label::after {
+    inset: 0px !important;
+    /* Add any other styles you want to override */
+}
+
+#rulenamesearchbar .form-floating > #workflow_name_label::after,
+#rulenamesearchbar .form-floating > .form-control:focus ~ #workflow_name_label::after,
+#rulenamesearchbar .form-floating > .form-control:not(:placeholder-shown) ~ #workflow_name_label::after {
+    inset: 0px !important;
+}
+
+.myd-tab-wrapper {
+	display: flex;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+	padding: 16px 2.5rem;
+	min-height: 56px;    
+	border-bottom: 1px solid #ccc
+}
+
+#myd-rule-tabs {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	gap: 1rem;
+	width: 100%;
+	white-space: nowrap;
+}
+
+.myd-tab-scroll {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 1.2rem;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
+	width: 2rem;
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #333;
+}
+
+.myd-tab-scroll-left {
+    left: 0;
+}
+
+.myd-tab-scroll-right {
+    right: 0;
+}
+
+#myd-rule-tabs .nav-link {
+	white-space: nowrap;
+	padding: 0.5rem 1rem;
+	font-weight: 500;
+	border: none;
+	background: none;
+	color: #03c4eb;
+}
+
+#myd-rule-tabs .nav-link:hover {
+    transform: scale(1.1);
+}
+
+#myd-rule-tabs .nav-item {
+	display: inline-block;
+}
+
+#myd-rule-tabs::-webkit-scrollbar {
+	display: none;
+}
+
+.table-rule-view, .table-rule-view-workflows{
+	border-radius: 20px;
+	border: #333 solid 1px;
+	border-collapse: separate !important;
+	background: white;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.tab_rule{
+	border-bottom: 0px solid #ffffff !important;	
+}
+
+.table-rule-view:not(#tab_connector) tr > td:first-child {
+    color: #6c757d;
+    padding-left: 2em;
+}
+
+#tab_connector tr:nth-child(even) td {
+    color: #000000;
+}
+
+#tab_connector tr:nth-child(odd) td {
+    color: #6c757d; 
+}
+
+#tab_connector tr td{
+   padding-left: 2em;
+}
+
+table.table-rule-view th,
+table.table-rule-view td,
+table.table-rule-view-workflows th,
+table.table-rule-view-workflows td {
+    border: none !important;
+}
+
+table.table-rule-view, .table-rule-view-workflows {
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    overflow: hidden;
+}
+
+table.table-rule-view tr:first-child th, table.table-rule-view-workflows tr:first-child th {
+    border-bottom: 1px solid #ccc !important;
+}
+
+.link-rule-detail,.link-rule-detail a{
+	color: #03c4eb !important;
+}
+.block-btn-infos {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.75rem;
+}
+
+.rule-panel-wrapper {
+	gap: 2rem;
+	margin-top: 2rem;
+}
+
+.table-rule-view td,
+.table-rule-view th {
+	border: none !important;
+}
+
+.table-rule-view tr:first-child th, .table-rule-view-workflows tr:first-child th {
+	border-bottom: 1px solid #ccc !important;
+}
+
+.table-rule-view, .table-rule-view-workflows {
+	border: 1px solid #ccc;
+	border-radius: 12px;
+	border-collapse: separate !important;
+	border-spacing: 0;
+	overflow: hidden;
+	box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+}
+
+.table-rule-view td, .table-rule-view th {
+	white-space: normal;
+	word-break: break-word;
+}
+
+.detail-rule-title {
+	padding-left: 0.8rem;
+	display: inline-block;
+	font-size: 1.1rem;
+	font-weight: 600;
+	padding-right: 1rem;
+	margin-bottom: 0.5rem;
+}
+
+.btn-outline-primary,
+.btn-outline-danger {
+	font-size: 0.9rem;
+	padding: 6px 10px;
+}
+
+.connector-footer-icons .fa {
+	display: inline-block;
+	margin-left: auto;
+	text-align: right;
+}
+
+.link-rule-detail,
+.link-rule-detail a {
+	color: #337ab7 !important;
+	font-weight: 500;
+}
+.rule-panel-wrapper .table-rule-view {
+	flex-grow: 2;
+}
+
+.custom-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.custom-col {
+  flex: 1 1 48%;
+  min-width: 300px;
+  box-sizing: border-box;
+}
+
+.rule-details-buttons {
+  margin-top: 1.5rem;
+  display: inline-block !important;
+  margin-left: 200px;
+}
+
+.rule-connectors-buttons {
+  display: inline-block !important;
+  margin-left: 280px;
+}
+
+.description-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  column-gap: .5rem;
+  width: 100%;
+}
+
+.description-field .value,
+#description-field-value {
+  min-width: 0;
+  display: block;
+  visibility: visible;
+}
+
+.description-collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3.5em;
+}
+
+.edit-button-description {
+  color: #337ab7;
+  margin: 0;
+  line-height: 1;
+}
+
+.read-more-link {
+  display: inline-block;
+  color: #0a58ca;
+  cursor: pointer;
+  margin-top: 0.3em;
+}
+
+.edit-button-description{
+	color: #337ab7;
+}
+.info-toggle {
+	display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 7px;
+    border: 2px dashed #03c4eb;
+    border-radius: 0px 100px 100px 0px;
+    color: #4b4b4b;
+    font-size: 0.9em;
+    white-space: nowrap;
+    max-width: 40px;
+    overflow: hidden;
+    transition: max-width 0.5s ease, padding 0.3s ease;
+    cursor: pointer;
+}
+
+.info-toggle .text {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.info-toggle.expanded {
+  max-width: 500px;
+  padding: 8px 18px;
+}
+
+.info-toggle.expanded .text {
+  opacity: 1;
+}
+
+.toggle-formula {
+	font-size: 0.85em;
+	padding-left: 8px;
+	cursor: pointer;
+	color: #03c4eb;
+}
+
+.toggle-formula:hover {
+	text-decoration: underline;
+}
+
+.search-formula{
+	max-width: 295px;
+}
+
+.table-rule-view tr:last-child td, .table-rule-view-workflows tr:last-child td {
+    padding-bottom: 1.5rem;
+}
+
+.workflow-detail-th-td{
+	padding-left: 30px !important;
+    white-space: normal !important;
+    word-wrap: break-word;
+    max-width: 150px;
+}

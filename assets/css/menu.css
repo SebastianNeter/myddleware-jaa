@@ -1,0 +1,223 @@
+/*********************************************************************************
+ * This file is part of Myddleware.
+
+ * @package Myddleware
+ * @copyright Copyright (C) 2013 - 2015  St�phane Faure - CRMconsult EURL
+ * @copyright Copyright (C) 2015 - 2016  St�phane Faure - Myddleware ltd - contact@myddleware.com
+ * @link http://www.myddleware.com	
+ 
+ This file is part of Myddleware.
+ 
+ Myddleware is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Myddleware is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Myddleware.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************************/
+
+/* menu {
+    margin-top: 40px;
+} */
+
+menu ul, menu li {
+	list-style: none;
+}
+
+menu li {
+	background: #ffffff;	
+	display: inline-block;
+    width: 233px;
+    padding-top: 15px;
+    height: 57px;
+    text-align: center;
+    font-weight: bold;
+}
+
+menu .dropdown-menu > li > a, menu .dropdown-menu > li > a:hover {   		
+	background-color:transparent;
+	background-image:transparent;
+	background:transparent;
+}
+
+
+
+menu .dropdown-menu > li > a {
+	color: #000000;
+}
+
+menu .dropdown-menu > li > a:hover {
+	color: #03c4eb;
+}
+
+menu li li, #myd_top li li {
+	background: white;
+    text-align: left;
+    overflow:hidden;  
+    height: 33px; 	
+	padding: 0;
+	padding-left: 10px;
+}
+
+.history-element-home{
+    height: 50px !important;	
+}
+
+.history-element-home-short{
+	height: 30px !important;
+}
+
+/* Dropdown menu */
+
+.dropdown-menu{
+	margin-left: -5px !important;
+    margin-top: 10px !important;
+	border: 0px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+menu li li:hover, #myd_top li li:hover {
+	background: transparent;
+}
+
+#myd_top .nav-pills > li > a:focus, menu .nav-pills > li > a:focus {
+	background: transparent;
+}
+
+#myd_top li a {
+	color: white;
+	text-decoration: none;
+}
+
+#myd_top li li a {
+	color: #000000;
+}
+
+menu .nav-pills > li > a, menu .nav .open > a, menu .nav .open > a:hover, menu .nav .open > a:focus {
+	color: rgb(0, 0, 0);
+	background-color:transparent;
+	border-radius: none;
+	font-size: smaller;
+}
+
+menu li:hover , menu .nav-pills > li > a:hover {
+	color:#03c4eb !important;
+	cursor:pointer;
+}
+
+menu .logo-nav:hover{
+	background: #ffffff;
+}
+
+#myd_top nav {
+	padding-right: 150px;
+}
+
+#myd_top .nav-pills > li > a, #myd_top .nav-pills > li > a:hover, #myd_top .nav .open > a, #myd_top .nav .open > a:hover, #myd_top .nav .open > a:focus {   		
+	color: white;
+	background-color:transparent;
+	border-radius: none;
+}
+
+#myd_top .nav-pills > li > a:hover, #myd_top .nav .open > a, #myd_top .nav .open > a:hover, #myd_top .nav .open > a:focus {
+	color: #198BCA;
+}
+
+#search {
+	padding-top: 25px;	
+}
+
+menu li a {
+	text-decoration: none;
+}
+
+/* LOGO  */
+.logo-nav{
+	padding-top: 5px;
+	margin-right: 120px;
+	margin-left: 40px;
+}
+
+.flex-nav{
+	flex-wrap: initial !important;
+	width: 92%;
+    margin-right:auto;
+}
+
+header{
+	background-color: #ffffff !important;
+}
+
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+}
+
+.dropdown-toggle::after {
+	display: none;
+}
+
+.title_section_menu.active {
+    color: #03c4eb !important;
+}
+
+.svg_user {
+    min-width: 24px;
+    height: auto;
+}
+
+.sous_menu_navbar{
+    width: 338px !important;
+    padding: 0.5rem 5px !important;
+    font-size: 1rem !important;
+    color: #3a3a3a !important;
+    border-radius: 0.5rem !important;
+    margin-left: -6rem !important;
+}
+
+.icon_navbar {
+	margin-left: 130px;
+    margin-right: -140px;
+}
+
+.star-icon {
+    transition: transform 0.3s ease, font-size 3.3s ease;
+    font-size: 16px;
+    margin-left: -12px;
+    color: gold;
+    position: relative;
+    top: 8px;
+	z-index: 2;
+	display: inline-block;
+}
+
+.star-icon-btn-filter { 
+	top: 13px !important; 
+	left: 10px; 
+}
+
+.star-cron { 
+	font-size: 12px !important; 
+	margin-left: -76px !important; 
+	top: 7px !important; 
+}
+
+.title_section_menu:hover .star-icon {
+  transform: rotate(20deg) scale(1.5);
+  z-index: 10; 
+}
+
+.sous_menu_navbar .dropdown-item:hover .star-icon,
+.sous_menu_navbar .dropdown-item:focus .star-icon,
+.sous_menu_navbar .dropdown-item:focus-visible .star-icon {
+  transform: rotate(20deg) scale(1.2);
+}
+
+.star-icon:hover { 
+	transform: rotate(20deg) scale(1.2); 
+}

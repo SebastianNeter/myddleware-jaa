@@ -1,0 +1,101 @@
+{#/*********************************************************************************
+ * This file is part of Myddleware.
+
+ * @package Myddleware
+ * @copyright Copyright (C) 2013 - 2015  Stéphane Faure - CRMconsult EURL
+ * @copyright Copyright (C) 2015 - 2016  Stéphane Faure - Myddleware ltd - contact@myddleware.com
+ * @link http://www.myddleware.com	
+ 
+ This file is part of Myddleware.
+ 
+ Myddleware is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Myddleware is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Myddleware.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************************/ #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	|
+	{{ 'rulegroup.list'|trans }}
+{% endblock %}
+
+{% block titlesm %}
+	{{ 'rulegroup.list'|trans }}
+	{% if nb_rulegroup > 0 %}
+		({{ nb_rulegroup }})
+	{% endif %}
+{% endblock titlesm %}
+
+{% block body %}
+
+<div class="d-flex align-items-center justify-content-center my-5">
+    <a href="{{ path('rulegroup_create') }}" class="btn btn-primary">{{ 'rulegroup.create_new'|trans }}</a>
+</div>
+{% include '_notifications.html.twig' with { filter_prefix: 'rulegroup.' } %}
+<div id="rulegroups">
+	<div class ="table-wrapper">
+		<table class="listepager table container">
+			<thead class="text-center">
+				<tr>
+					<th class="rounded-table-up-left">{{ 'rulegroup.table.id'|trans }}</th>
+					<th>{{ 'rulegroup.table.name'|trans }}</th>
+					<th>{{ 'rulegroup.table.date_created'|trans }}</th>
+					<th>{{ 'rulegroup.table.date_modified'|trans }}</th>
+					<th>{{ 'rulegroup.table.modified_by'|trans }}</th>
+					<th>{{ 'rulegroup.table.description'|trans }}</th>
+					<th>{{ 'rulegroup.table.options'|trans }}</th>
+					<th class="rounded-table-up-right"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for ruleGroup in entities %}
+					<tr>
+						<td>{{ ruleGroup.id }}</td>
+						<td>
+							<a href="{{ path('rulegroup_show', {'id': ruleGroup.id}) }}" class="help-link all-link">{{ ruleGroup.name }}</a>
+						</td>
+						<td>{{ ruleGroup.dateCreated|date(app.user.dateFormat ~ ' H:i:s', app.user.timezone) }}</td>
+						<td>{{ ruleGroup.dateModified|date(app.user.dateFormat ~ ' H:i:s', app.user.timezone) }}</td>
+						<td>{{ ruleGroup.modifiedBy.username }}</td>
+						<td>{{ ruleGroup.description }}</td>
+						<td>
+							<a href="{{ path('rulegroup_show', {'id': ruleGroup.id}) }}" title="{{ 'rulegroup.btn.view'|trans }}" class="btn btn-sm btn-outline-success">
+								<span class="btn-opt">
+									<i class="fa fa-eye"></i>
+								</span>
+							</a>
+							<a href="{{ path('rulegroup_edit', {'id': ruleGroup.id}) }}" title="{{ 'rulegroup.btn.edit'|trans }}" class="btn btn-sm btn-outline-primary">
+								<span class="btn-opt">
+									<i class="fa fa-pen" aria-hidden="true"></i>
+								</span>
+							</a>
+							<form method="post" action="{{ path('rulegroup_delete', {'id': ruleGroup.id}) }}" style="display: inline;">
+								<button type="submit"
+										class="delete btn btn-sm btn-outline-danger"
+										onclick="return confirm('{{ 'rulegroup.delete'|trans }}');">
+									<span class="btn-opt">
+										<i class="fa fa-trash" aria-hidden="true"></i>
+									</span>
+								</button>
+							</form>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}
+
+{% block cssin %}{% endblock cssin %}

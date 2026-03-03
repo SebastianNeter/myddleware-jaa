@@ -1,0 +1,24 @@
+--- /var/www/html/src/Solutions/moodle.php.bak_2026-02-04_172553	2026-02-04 16:57:11.500040647 +0000
++++ /var/www/html/src/Solutions/moodle.php	2026-02-04 17:25:53.129342050 +0000
+@@ -603,18 +603,9 @@
+     // Valeur par défaut "0"
+     // Si la règle n'est qu'en création, pas en modicication alors le mode est C
+     public function getRuleMode($module, $type): array
+-    {
+-        if (
+-                'target' == $type
+-            && in_array($module, ['groups'])
+-        ) { // Si le module est dans le tableau alors c'est uniquement de la création
+-            return [
+-                'C' => 'create_only',
+-            ];
+-        }
+-
+-        return parent::getRuleMode($module, $type);
+-    }
++{
++    return parent::getRuleMode($module, $type);
++}
+ 
+     // Function de conversion de datetime format solution à un datetime format Myddleware
+     protected function dateTimeToMyddleware($dateTime)

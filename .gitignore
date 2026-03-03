@@ -1,0 +1,150 @@
+# Email spool folder
+/app/spool/*
+
+# Cache, session files and logs (Symfony3)
+/var/cache/*
+/var/log/*
+/var/logs/*
+/var/sessions/*
+!var/cache/.gitkeep
+!var/logs/.gitkeep
+!var/sessions/.gitkeep
+
+/src/localfiles
+
+# Parameters
+/config/packages/parameters.yml
+/config/packages/public/parameters_public.yml
+/config/packages/public/parameters_smtp.yml
+/config/packages/public/parameters_custom.yml
+
+# LexikJWTAuthenticationBundle
+/config/jwt/
+/config/jwt/*.pem
+
+# Parameters for Custom code - Myddleware 2 (Symfony 3)
+/config/services_custom.yaml
+
+# Custom directory
+/src/Custom/*
+
+# Premium directory
+/src/Premium/
+
+# Managed by Composer
+/app/bootstrap.php.cache
+/var/bootstrap.php.cache
+/bin/*
+!bin/console
+!bin/symfony_requirements
+/vendor/
+/public/bundles
+/public/css/*
+
+# Assets and user uploads
+/web/bundles/
+/web/uploads/
+
+# Assets managed by Bower
+/web/assets/vendor/
+
+# PHPUnit
+/app/phpunit.xml
+/phpunit.xml
+
+# Build data
+/build/
+
+# Backup entities generated with doctrine:generate:entities command
+*/Entity/*~
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+###< symfony/webpack-encore-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+
+###> lexik/jwt-authentication-bundle ###
+/config/packages/jwt/*.pem
+###< lexik/jwt-authentication-bundle ##
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> local env file ###
+.env.local
+.env.local.php
+.env.prod
+.env.dev
+/.env.*.local
+###< env file ###
+
+##> vscode and other IDE parameters ## 
+.vscode
+/.idea/*
+##< vscode parameters ##
+
+##> old files & folders ##
+/.platform/*
+.platform.app.yaml
+composer.phar
+##< old files & folders ##
+
+##> Docker ##
+/docker/tmp/
+!/docker/tmp/.gitkeep
+/docker/var/
+!/docker/var/*/.gitkeep
+.env.docker
+/docker/etc/openvpn/*
+##< Docker ##
+
+/migrations
+
+## PHPCSFixer
+.php-cs-fixer.php
+.php-cs-fixer.cache
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+delete-cache-logs-myddleware.ps1
+/.env.test
+tests/Solutions/ids-to-delete.json
+
+# --- JAA local / ops (DO NOT COMMIT) ---
+.env
+*.sql
+backup_*.sql
+*.bak
+Dockerfile.bak*
+docker-compose.yml.bak*
+public/*.bak*
+public/*.hostbak*
+
+# --- Myddleware Premium (PRIVATE / LICENSED) ---
+/src/Premium/
+/src/Premium/**

@@ -1,0 +1,87 @@
+#bloc_paramName1,
+#bloc_paramvalue1,
+#bloc_paramName2,
+#bloc_paramvalue2 {
+    display: none;
+}
+
+
+.errors ul {
+    padding-left: 0;
+}
+
+.errors ul li {
+    list-style: none;
+    padding: 5px;
+    color: red;
+}
+
+.button_plus_message {
+  color: white;
+  background-color: #6D6D6E;
+  padding: 0px 7px 3px 7px;
+  border-radius: 50%;
+  font-weight: bold;
+  float: right;
+  margin-right: 10px;
+}
+
+.button_plus_message:hover, .button_minus_message:hover {
+  color: #6D6D6E;
+  background-color: white;
+  border: 1px solid #6D6D6E;
+}
+
+.button_minus_message {
+  color: white;
+  background-color: #6D6D6E;
+  padding: 0px 11px 4px 10px;
+  border-radius: 50%;
+  font-weight: bold;
+  float: right;
+  margin-right: 10px;
+}
+  .bg-danger {
+    background-color: #f2dedf !important; 
+}
+
+.bg-warning {
+    background-color:#FFECCC !important;
+}
+
+.bg-none {
+    background-color: none; 
+}
+
+.icon-danger {
+    color: #dc3545;
+}
+
+.icon-warning {
+    color: #ffc107;
+  }
+
+
+  #cronjobresult_table {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+#cronjobresult_table.show {
+    max-height: 2000px;
+    opacity: 1;
+}
+
+.enabled-crontab{
+    padding-left: 3.7rem !important;
+}
+
+.th-running{
+    min-width: 185px;
+}
+
+.command-crontab{
+    min-width: 215px;
+}

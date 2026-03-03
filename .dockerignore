@@ -1,0 +1,14 @@
+/.idea/
+/.vscode/
+/docker/
+!/docker/etc/
+!/docker/etc/cron.d/
+!/docker/etc/cron.d/myddleware
+!/docker/script/
+!/docker/script/myddleware-*.sh
+/var/
+.git
+node_modules
+vendor
+var/cache
+var/log

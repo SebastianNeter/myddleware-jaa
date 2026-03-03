@@ -1,0 +1,59 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: auto
+
+    providers:
+        username_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+
+    firewalls:
+        login:
+            pattern:  ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            pattern:   ^/api
+            stateless: true
+            jwt: ~
+        dev:
+            pattern: ^/(_(profiler|wdt))/
+            security: false
+        main:
+            pattern: .*
+            provider: username_provider
+            custom_authenticators:
+                - App\Security\SecurityAuthenticator
+            remember_me:
+                secret:    "%secret%"
+                lifetime:  30000000
+                path:      /
+                domain:    ~
+            logout:
+                path: app_logout
+                target: login
+            lazy: true
+            entry_point: App\Security\SecurityAuthenticator
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+
+    access_control:
+        - { path: ^/$, role: PUBLIC_ACCESS }
+        - { path: ^/login$, role: PUBLIC_ACCESS }
+        - { path: ^/resetting, role: PUBLIC_ACCESS }
+        - { path: ^/install_requirements, role: PUBLIC_ACCESS }
+        - { path: ^/verifAccount, role: PUBLIC_ACCESS }
+        - { path: ^/panel, role: ROLE_USER }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/rule/, role: ROLE_USER }
+        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/rulegroup/, role: ROLE_USER }
+        - { path: ^/workflow/, role: ROLE_USER }
+        - { path: ^/variables, role: ROLE_USER }

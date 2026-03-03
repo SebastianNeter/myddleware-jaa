@@ -1,0 +1,264 @@
+{#/*********************************************************************************
+ * This file is part of Myddleware.
+
+ * @package Myddleware
+ * @copyright Copyright (C) 2013 - 2015  Stéphane Faure - CRMconsult EURL
+ * @copyright Copyright (C) 2015 - 2016  Stéphane Faure - Myddleware ltd - contact@myddleware.com
+ * @link http://www.myddleware.com	
+ 
+ This file is part of Myddleware.
+ 
+ Myddleware is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Myddleware is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Myddleware.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************************/ #}
+
+{% extends 'base.html.twig' %}
+{% block titlesm %}
+	<div class="homepage_welcome m-3">
+		<span class="typewriter mb-4 mt-5">{{'title.index.panel'|trans }}</span>
+		<p class="homepage_welcome_text mt-4">{{'title.index.text'|trans }}</p>
+		<p class="homepage_welcome_text mb-5">{{'title.index.text2'|trans }}</p>
+		<button id="bnt_welcome" class="btn btn-dark text-center mt-5" onclick="window.open('https://myddleware.github.io/myddleware-docs/#/', '_blank')">
+			{{ 'title.index.btn'|trans }}
+		</button>
+	</div>
+{% endblock titlesm %}
+{% block body %}
+	<div>
+		<div id="panel" class="row">
+			<div class="col">
+				<div class="d-flex justify-content-center my-4">
+					<h3 class="display-6 mt-4 title_section_homepage">{{'panel.data'|trans}}</h3>
+				</div>
+			</div>
+			<div id="info-blocks" class="container my-5 px-4">
+				<div class="row justify-content-center align-center">
+					<div class="col">
+						<div class="row d-flex">
+							<div class="card m-2 info col shadow-sm">
+								<div class="card-body">
+									<span class="icon-container pt-5">
+										<svg
+											class="icon_small_homepage" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512">
+											<!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+											<path d="M438.6 150.6c12.5-12.5 12.5-32.8 0-45.3l-96-96c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.7 96 32 96C14.3 96 0 110.3 0 128s14.3 32 32 32l306.7 0-41.4 41.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l96-96zm-333.3 352c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 416 416 416c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0 41.4-41.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3l96 96z"/>
+										</svg>
+									</span>
+									<div class="text-center">
+										<p id="countNbDocuments">0</p>
+										<h4 class="card-title title_countNbDocuments pt-3 pb-5">{{'panel.documents.title'|trans}}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card m-2 info col shadow-sm error-card"> 
+					<div class="card-body">
+						{% if errorByRule %}
+							<div class="d-flex justify-content-between align-items-center mb-3">
+								<h4 class="card-title mb-0 exclamation-title-home">
+									<i class="fa fa-exclamation-triangle me-2"></i> 
+									{{ 'panel.list_job.nb'|trans }} ({{ errorByRule|length }})
+								</h4>
+							</div>
+							<ul class="list-group list-group-flush error-list">
+								{% for rule in errorByRule %}
+									<li class="list-group-item d-flex justify-content-between align-items-center 
+										{% if loop.index > 4 %}d-none{% endif %}">
+										<a class="help-link all-link text-decoration-none fw-semibold text-dark error-link" 
+										href="{{ path('flux_error_rule', {'id' : rule.id }) }}">
+											{{ rule.name }}
+										</a>
+										<span class="badge rounded-pill bg-secondary">
+											{{ rule.cpt }}
+										</span>
+									</li>
+								{% endfor %}
+							</ul>
+							{% if errorByRule|length > 4 %}
+								<div class="text-center mt-3">
+									<button id="toggleErrorsBtn" class="btn btn-sm btn-outline-primary" data-expanded="false">
+										Show more
+									</button>
+								</div>
+							{% endif %}
+						{% else %}
+							<p class="text-muted text-center m-0">
+								<i class="fa fa-check-circle text-success me-2"></i> 
+								no document
+							</p>
+						{% endif %}
+					</div>
+				</div>
+				</div>
+			</div>
+			<section class="solution-home-section">
+				<div class="col" id="title-solution-home">
+					<div class="d-flex justify-content-center my-4">
+						<h3 class="display-6 title_section_homepage">{{ 'panel.solutions.title'|trans }}</h3>
+					</div>
+				</div>
+
+				{% if solutions is not empty %}
+				{# Right #}
+					<div class="solution-home-scroll-container scroll-right">
+						<ul class="solution-home-scroll solution-home-list">
+							{% for solution in solutions %}
+								<li class="solution-home-item">
+									<a href="{{ 'view_connector.help.link'|trans }}{{ solution }}" target="_blank">
+										<img alt="{{ solution }}" src="{{ asset('build/images/solution/' ~ solution ~ '.png') }}">
+									</a>
+								</li>
+							{% endfor %}
+							{% for solution in solutions %}
+								<li class="solution-home-item">
+									<a href="{{ 'view_connector.help.link'|trans }}{{ solution }}" target="_blank">
+										<img alt="{{ solution }}" src="{{ asset('build/images/solution/' ~ solution ~ '.png') }}">
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+					{# gauche #}
+					<div class="solution-home-scroll-container scroll-left mb-4">
+						<ul class="solution-home-scroll solution-home-list">
+							{% for solution in solutions %}
+								<li class="solution-home-item">
+									<a href="{{ 'view_connector.help.link'|trans }}{{ solution }}" target="_blank">
+										<img alt="{{ solution }}" src="{{ asset('build/images/solution/' ~ solution ~ '.png') }}">
+									</a>
+								</li>
+							{% endfor %}
+							{% for solution in solutions %}
+								<li class="solution-home-item">
+									<a href="{{ 'view_connector.help.link'|trans }}{{ solution }}" target="_blank">
+										<img alt="{{ solution }}" src="{{ asset('build/images/solution/' ~ solution ~ '.png') }}">
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			</section>
+
+			{# FEATURES #}
+			<section class="feature_homepage">
+				<div class="col">
+					<div class="d-flex justify-content-center my-4">
+						<h3 class="display-6 title_section_homepage">{{'panel.features.title'|trans}}</h3>
+					</div>
+				</div>
+
+				<div class="container mt-5">
+					<div class="row">
+						<div class="col-md-4 mb-3">
+							<button class="btn btn-dark w-100 toggle-btn-homepage">
+								<div>
+									<i class="fa fa-info-circle home_fa_info_circle" aria-hidden="true"></i>
+								</div>
+								<p>Direct job scheduler access in Myddleware</p>
+								<span class="extra-text" style="display: none;">Control various processes in Myddleware and monitor their progress, have them run automatically at various intervals. Let Myddleware work for you!</span>
+							</button>
+						</div>
+						<div class="col-md-4 mb-3">
+							<button class="btn btn-dark w-100 toggle-btn-homepage">
+								<div>
+									<i class="fa fa-info-circle home_fa_info_circle" aria-hidden="true"></i>
+								</div>
+								<p>Workflow</p>
+								<span class="extra-text" style="display: none;">Let Myddleware execute automatic actions for your documents based on your specific conditions!</span>
+							</button>
+						</div>
+						<div class="col-md-4 mb-3">
+							<button class="btn btn-dark w-100 toggle-btn-homepage">
+								<div>
+									<i class="fa fa-info-circle home_fa_info_circle" aria-hidden="true"></i>
+								</div>
+								<p>Document Mass action</p>
+								<span class="extra-text" style="display: none;">Execute actions, such as reload, cancel or delete on multiple documents at once with a single click!</span>
+							</button>
+						</div>
+						<div class="col-md-4 mb-3">
+							<button class="btn btn-dark w-100 toggle-btn-homepage">
+								<div>
+									<i class="fa fa-info-circle home_fa_info_circle" aria-hidden="true"></i>
+								</div>
+								<p>Rule Duplication</p>
+								<span class="extra-text" style="display: none;">Duplicate a rule if you need to create a new one with similar settings. It won't affect the original rule in any way, and it's so much faster than creating a new rule from scratch! What's more, if you need to test something for a rule, you can duplicate it, and you immediately have your test rule ready to go!</span>
+							</button>
+						</div>
+						<div class="col-md-4 mb-3">
+							<button class="btn btn-dark w-100 toggle-btn-homepage">
+								<div>
+									<i class="fa fa-info-circle home_fa_info_circle" aria-hidden="true"></i>
+								</div>
+								<p>More document filters</p>
+								<span class="extra-text" style="display: none;">Use a wide array of custom filters to refine your search, such as date range, specific document status, document type, document content, etc.</span>
+							</button>
+						</div>
+						<div class="col-md-4 mb-3">
+							<button class="btn btn-dark w-100 toggle-btn-homepage">
+								<div>
+									<i class="fa fa-info-circle home_fa_info_circle" aria-hidden="true"></i>
+								</div>
+								<p>Variables</p>
+								<span class="extra-text" style="display: none;">You have a word or a number that is the same across many rules and only changes occasionally ? Use the variables so you don't have to change it everywhere at the same time
+</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+			{# CONTACT US #}
+			<section class="solution-home-section" id="bottom_section_homepage">
+				<div class="col" id="title_solution_homepage">
+					<div class="d-flex justify-content-center my-4">
+						<h3 class="display-6 title_section_homepage">{{'panel.contact.title'|trans}}</h3>
+					</div>
+				</div>
+				<div class="d-flex justify-content-center my-5">
+					<div class="contact-panel">
+						<div  class="contact-panel-1">
+							<h4 class="mb-4">{{'panel.contact.title2'|trans}}</h4>
+							<p>{{'panel.contact.text1'|trans}}</p>
+							<p>{{'panel.contact.text2'|trans}}
+								:
+								<div class="home-contact">contact@myddleware.com</div>
+							</p>
+							<p>{{'panel.contact.text3'|trans}}
+								<a class="home-contact" href="https://github.com/Myddleware/myddleware/issues" target="_blank">GitHub</a>
+							</p>
+						</div>
+					</div>
+					<div class="contact-panel">
+						<h4 class="mb-4">{{'panel.contact.title3'|trans}}</h4>
+						<p>{{'panel.contact.text4'|trans}}</p>
+						<p>{{'panel.contact.text5'|trans}}
+							:
+							<div class="home-contact">romanfaure@myddleware.com</div>
+						</p>
+					</div>
+				</div>
+				<div class="social-bar">
+					<span class="line"></span>
+					<div class="icons">
+						<a href="https://www.youtube.com/channel/UCxI0ziSiRXXTqQ-XfFJr7-w" target="_blank" class="icon youtube" title="YouTube"></a>
+						<a href="https://www.linkedin.com/company/10332261/" target="_blank" class="icon linkedin" title="LinkedIn"></a>
+						<a href="https://twitter.com/myddleware_fr" target="_blank" class="icon twitter" title="X"></a>
+					</div>
+					<span class="line"></span>
+				</div>
+			</section>
+		</div>
+	</div>
+</div></div><div class="clr"></div></div></div><script type="text/javascript">let trans_click = "{{ 'panel.solutions.click'|trans }}";</script><script type="text/javascript">var countNbDocuments = {{ countNbDocuments|json_encode|raw }};</script>{% endblock %}

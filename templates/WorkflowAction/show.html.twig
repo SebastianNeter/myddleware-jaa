@@ -1,0 +1,208 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	|
+	{{ 'view_workflow_action.title'|trans }}
+{% endblock %}
+{% block titlesm %}
+	{{ 'view_workflow_action.title'|trans }}
+	<i class="fa-solid fa-arrow-right fa-flip arrow-cut-animation fa-solid fa-arrow-right fa-flip"></i>
+	{{ workflow.name }}
+{% endblock titlesm %}
+
+{% block body %}
+
+	{% include '_notifications.html.twig' with { filter_prefix: 'workflowaction.' } %}
+
+	<div id="workflows">
+		<div class="link-help-view text-end mb-4 mx-4">
+			<a href="https://myddleware.github.io/myddleware-docs/#/advanced_usage?id=workflowaction">
+				<i class="fa fa-info-circle" aria-hidden="true"></i>
+				{{ 'rule.help' | trans }}
+			</a>
+		</div>
+		<div class="text-center pt-4 pb-4">
+			<a href="{{ path('workflow_show', {'id': workflow.workflow.id}) }}" class="btn btn-outline-primary m-2">{{ 'view_workflow_action.back_to_workflow'|trans }}</a>
+			<a href="{{ path('workflow_action_edit', {'id': workflow.id}) }}" class="btn btn-outline-success m-2">{{ 'view_workflow_action.edit'|trans }}</a>
+			<form method="post" action="{{ path('workflow_action_delete', {'id': workflow.id}) }}" style="display: inline;">
+				<button type="submit" 
+						onclick="return confirm('{{ 'view_workflow_action.confirm_delete'|trans }}');" 
+						class="btn btn-outline-danger m-2">
+					{{ 'view_workflow_action.delete'|trans }}
+				</button>
+			</form>
+		</div>
+
+		<div>
+
+			{% if workflow is not null %}
+				<div class="container text-left pt-3">
+					<h4>ACTION</h4>
+				</div>
+				<div class="workflow-details container mt-4 px-4">
+					<div id="workflow-content" class="collapse show mt-4">
+						<div class="workflow-row mb-2">
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow.name'|trans|upper }}</strong>
+								<div>{{ workflow.name }}</div>
+							</div>
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow_action.workflow'|trans|upper }}</strong>
+								<div>
+									<a href="{{ path('workflow_show', {'id': workflow.workflow.id}) }}" class="help-link all-link">{{ workflow.workflow.name }}</a>
+								</div>
+							</div>
+						</div>
+						<div class="workflow-row mb-2">
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow.description'|trans|upper }}</strong>
+								<div>{{ workflow.description }}</div>
+							</div>
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow_action.action'|trans|upper }}</strong>
+								<div>{{ workflow.action }}</div>
+							</div>
+						</div>
+						<div class="workflow-row mb-2">
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow.status'|trans|upper }}</strong>
+								<div class="form-check form-switch text-center">
+									<input class="workflow_status form-check-input workflow-check-input" type="checkbox" id="activeWorkflow_{{ workflow.id }}" data-id="{{ workflow.id }}" data-type="workflowAction" {{ workflow.active ? 'checked' : '' }}>
+								</div>
+							</div>
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow_action.order'|trans|upper }}</strong>
+								<div>{{ workflow.order }}</div>
+							</div>
+						</div>
+						<div class="workflow-row mb-2">
+							<div class="workflow-col mb-2">
+								<strong>{{ 'view_workflow.arguments'|trans|upper }}</strong>
+								<div>
+									{% if workflow.arguments is iterable %}
+										<ul>
+											{% for key, argument in workflow.arguments %}
+												<li>{{ key }}:
+													{% if argument is iterable %}
+														<ul>
+															{% for subKey, subArgument in argument %}
+																<li>{{ subKey }}:
+																	{{ subArgument }}</li>
+															{% endfor %}
+														</ul>
+													{% else %}
+														{% if key == 'rerun' %}
+															{{ argument ? '1' : '0' }}
+														{% else %}
+															{{ argument }}
+														{% endif %}
+													{% endif %}
+												</li>
+											{% endfor %}
+										</ul>
+									{% else %}
+										{{ workflow.arguments }}
+									{% endif %}
+								</div>
+							</div>
+							<div class="workflow-col mb-2">
+								{# we put the multiple runs here	 #}
+								<strong>{{ 'view_workflow_action.multiple_runs'|trans|upper }}</strong>
+								<div>
+									{% if workflow.multipleRuns == 1 %}
+										{{ 'view_workflow_action.multiple_runs_yes'|trans }}
+									{% else %}
+										{{ 'view_workflow_action.multiple_runs_no'|trans }}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+
+			<div class="container mt-5 pt-5 text-left">
+					<h4>{{ 'view_workflow.logs'| trans | upper }}</h4>
+			</div>
+			<div class="workflow-action-card-table container workflow-details">
+				<div class="card-header card-title-workflow">
+					<button id="toggle-logs-btn" class="toggle-button btn btn-outline-secondary btn-sm float-end" 
+							data-workflowaction-id="{{ workflow.id }}">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+
+				<div id="logs-content" class="collapse" style="display: none;">
+					<div id="logs-table-container" class="p-3 text-center">
+						<div class="spinner-border spinner-border-sm" role="status" aria-label="Loading"></div>
+        				<span class="ms-2">{{ 'view_workflow.loading_logs'|trans|default('Loading…') }}</span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			let logsLoaded = false;
+
+			$('#toggle-logs-btn').on('click', function() {
+				const $btn = $(this);
+				const $logsContent = $('#logs-content');
+
+				function setIcon(isOpen) {
+				const $i = $btn.find('i');
+				const $svg = $btn.find('svg[data-icon]');
+
+				if ($i.length) {
+					$i.removeClass('fa-plus fa-minus fa-plus-circle fa-minus-circle');
+					$i.addClass(isOpen ? 'fa-minus' : 'fa-plus');
+					return;
+				}
+				if ($svg.length) {
+					$svg.attr('data-icon', isOpen ? 'minus' : 'plus');
+					return;
+				}
+				$btn.html(isOpen ? '<i class="fa fa-minus"></i>' : '<i class="fa fa-plus"></i>');
+				}
+
+				const isVisible = $logsContent.is(':visible');
+
+				if (isVisible) {
+				$logsContent.slideUp(200, function() {
+					setIcon(false);
+				});
+				return;
+				}
+
+				$logsContent.slideDown(200, function() {
+				setIcon(true);
+				});
+
+				if (!logsLoaded) {
+				$.ajax({
+					url: "{{ path('workflow_action_show_logs', {'id': workflow.id}) }}",
+					type: 'GET',
+					headers: { 'X-Requested-With': 'XMLHttpRequest' },
+					success: function(response) {
+					$('#logs-table-container').html(response.html || response);
+					logsLoaded = true;
+					},
+					error: function(xhr, status, error) {
+					$('#logs-table-container').html('<p class="text-danger text-center">Error loading logs: ' + error + '</p>');
+					}
+				});
+				}
+			});
+		});
+	</script>
+{% endblock js %}

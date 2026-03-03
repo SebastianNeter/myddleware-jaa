@@ -1,0 +1,175 @@
+/*********************************************************************************
+ * This file is part of Myddleware.
+
+ * @package Myddleware
+ * @copyright Copyright (C) 2013 - 2015  St�phane Faure - CRMconsult EURL
+ * @copyright Copyright (C) 2015 - 2016  St�phane Faure - Myddleware ltd - contact@myddleware.com
+ * @link http://www.myddleware.com	
+ 
+ This file is part of Myddleware.
+ 
+ Myddleware is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Myddleware is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Myddleware.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************************/
+
+#myd_login-container {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-box {
+    background-color: #ffffff;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    overflow-y: auto;
+}
+
+.login-logo {
+    width: 236px;
+    height: 96px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 16px 10px 10px 2rem;
+}
+
+.login-logo img {
+    max-width: 20rem;
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #484848;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.login-info-box {
+    background: linear-gradient(135deg, #2c2c54, #03c4eb);
+    color: white;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 67%;
+    text-align: center;
+    height: 100vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-info-box p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 600px;
+}
+
+.login-info-box a.btn {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.login-info-box a.btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.login-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-inputs label {
+    font-size: 14px;
+    color: #5a5a5a;
+    font-weight: bold;
+}
+
+.login-inputs input[type="text"],
+.login-inputs input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.login-inputs input[type="text"]:focus,
+.login-inputs input[type="password"]:focus {
+    border-color: #03c4eb;
+    box-shadow: 0 0 0 4px rgba(3, 196, 235, 0.2);
+    outline: none;
+}
+
+button.btn-primary {
+    background-color: #03c4eb;
+    border: none;
+    font-size: 18px;
+    padding: 12px;
+    border-radius: 8px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+button.btn-primary:hover {
+    background-color: #0284a8;
+}
+
+.password-reset-link {
+    font-size: 14px;
+    color: #484848;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.password-reset-link:hover {
+    color: #3a3a3a;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.alert-danger {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.warning-message {
+    color: red;
+}
+
+.external-link {
+    margin-top: 15px;
+    display: inline-block;
+}
+

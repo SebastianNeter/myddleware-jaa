@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block titlesm %}
+    {{ 'crontab.title'|trans }}
+{% endblock %}
+{% block body %}
+
+	{% include '_notifications.html.twig' with { filter_prefix: 'jobscheduler.' } %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="mt-5 p-5">
+                    <table class="table">
+                        <thead class="table-light">
+                            {{ form_start(edit_form) }}
+                            <tr>
+                                <th scope="col">{{ 'crontab.period'|trans }}</th>
+                                <th scope="col">{{ 'crontab.command'|trans }}</th>
+                                <th scope="col">{{ 'crontab.description'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-bs-toggle="tooltip" data-bs-placement="left" title="{{ 'crontab.period_help'|trans }}">
+                                    {{ form_widget(edit_form.period, { 'attr': {'placeholder': '* /5 * * * *'} }) }}
+                                    {{ form_errors(edit_form.period) }}
+                                </td>
+                                <td>{{ form_widget(edit_form.command, { 'attr': {'placeholder': 'Your command'} }) }}</td>
+                                <td>{{ form_widget(edit_form.description, { 'attr': {'placeholder': 'Your description'} }) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">{{ 'crontab.running'|trans }}</th>
+                                <th scope="col">{{ 'crontab.max_instance'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ form_widget(edit_form.runningInstances, { 'attr': {'placeholder': 'Your running instances'} }) }}</td>
+                                <td>{{ form_widget(edit_form.maxInstances, { 'attr': {'placeholder': 'Your max instances'} }) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="form-check my-4">
+                        {{ form_widget(edit_form.enable, { 'attr': {'class': 'form-check-input'} }) }}
+                    </div>
+                    <div class="d-flex align-items-center my-4">
+                        {{ form_widget(edit_form.save, { 'attr': {'class': 'btn btn-primary me-3'} }) }}
+                        <a href="{{ path('jobscheduler_cron_list') }}" class="btn btn-secondary">
+                            {{ 'jobscheduler.cancel' | trans }}
+                        </a>
+                    </div>
+                    
+                    {{ form_end(edit_form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

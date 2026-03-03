@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block titlesm %} {{ 'view_rule.execute_id.title'|trans }}{% endblock %}
+
+{% form_theme formIdBatch 'bootstrap_5_layout.html.twig' %}
+
+{% block body %}
+
+<h1 class="px-4">{{ 'view_rule.execute_id.title'|trans }}</h1>
+
+
+<div class="container-fluid p-3">
+    {{ form_start(formIdBatch) }}
+    <div class="mb-3">
+        {{ form_label(formIdBatch.id) }}
+        {{ form_widget(formIdBatch.id, {'attr' : {'placeholder': "rule_execute_by_id.separate", 'class': 'form-control'}}) }}
+        {{ form_errors(formIdBatch.id) }}
+    </div>
+    <button type='submit' class='btn btn-success'>{{ 'view_rule.execute_id.run'|trans }}</button>
+    {{ form_end(formIdBatch) }}
+</div>
+
+{% endblock %}

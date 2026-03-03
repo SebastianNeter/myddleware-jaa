@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+	{{ parent() }}
+	|
+	{{ 'view_workflow_action.edit'| trans}}
+{% endblock %}
+{% block titlesm %}
+	{{ 'view_workflow_action.edit'| trans}}
+{% endblock titlesm %}
+{% block body %}
+	<div class="container mt-5">
+		{{ form_start(form) }}
+		<div class="text-center m-5 d-flex justify-content-between align-items-center">
+			<div class="left-buttons">
+				<a href="{{ path('workflow_show', {'id': workflowAction.Workflow.id}) }}" class="btn btn-outline-primary m-2">
+					{{ 'view_workflow_action.back'| trans }}
+				</a>
+			</div>
+
+			<div class="center-buttons">
+				<a href="{{ path('workflow_action_create_with_workflow', {'workflowId': workflowAction.Workflow.id}) }}" class="btn btn-outline-success m-2">
+					{{ 'Create new workflow action'| trans }}
+				</a>
+			</div>
+			
+			<div class="right-buttons">
+				<button type="submit" name="submit" class="btn btn-primary m-2">
+					{{ 'Save'|trans }}
+				</button>
+
+				<a href="{{ path('workflow_action_show', {'id': workflowAction.id}) }}" class="btn btn-outline-warning m-2">
+					{{ 'view_workflow_action.cancel_edit'| trans }}
+				</a>
+			</div>
+		</div>
+
+		<div class="card mb-3 pb-3">
+			<div class="card-header">
+				{{ 'view_workflow_action.edit'|trans }}
+			</div>
+			<div class="card-body m-3">
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-name" id="name-container">
+						{{ form_row(form.name) }}
+					</div>
+					<div class="col-md-6 workflow-field-container form-group-workflow-action workflow-action-edit-workflow" id="workflow-container">
+						{{ form_row(form.Workflow) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-description" id="description-container">
+						{{ form_row(form.description) }}
+					</div>
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-action" id="action-container">
+						{{ form_row(form.action) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action" id="order-container">
+						{{ form_row(form.order) }}
+					</div>
+					{% if form.multipleRuns is defined %}
+						<div class="col-md-6 form-group-workflow-action" id="multiple-runs-container">
+							{{ form_row(form.multipleRuns) }}
+						</div>
+					{% endif %}
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-status" id="status-container">
+						{{ form_row(form.status) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action" id="active-container">
+						{{ form_row(form.active) }}
+					</div>
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-rule" id="rule-change-container">
+						{{ form_row(form.ruleChangeData) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-to" id="to-container">
+						{{ form_row(form.to) }}
+					</div>
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-subject" id="subject-container">
+						{{ form_row(form.subject) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-12" id="message-container">
+						<div class="workflow-field-container form-group-workflow-action workflow-action-edit-message">
+							{{ form_row(form.message) }}
+						</div>
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-rule" id="rule-container">
+						{{ form_row(form.ruleGenerate) }}
+					</div>
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-searchfield" id="search-field-container">
+						{{ form_row(form.searchField) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action workflow-action-edit-searchvalue" id="search-value-container">
+						{{ form_row(form.searchValue) }}
+					</div>
+					<div class="col-md-6 form-group-workflow-action" id="rerun-container">
+						{{ form_row(form.rerun) }}
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class="col-md-6 form-group-workflow-action" id="document-type-container">
+						{{ form_row(form.documentType) }}
+					</div>
+				</div>
+				<div class="row mb-4" style="display: none;">
+					<div class="col-md-6 form-group-workflow-action" id="targetFieldContainer">
+						{{ form_row(form.targetFields) }}
+					</div>
+					<div class="col-md-6 form-group-workflow-action" id="targetFieldValueContainer" style="display: none;">
+						<label for="form_targetFieldValue">New value</label>
+						<input type="text" id="form_targetFieldValue" name="form[targetFieldValue][]" class="form-control">
+					</div>
+				</div>
+				<div id="dynamicFieldsContainer"></div>
+				<button type="button" class="btn btn-primary mt-3" id="addFieldButton">Add field</button>
+			</div>
+			<div class="text-center">
+				{{ form_row(form.submit) }}
+			</div>
+		</div>
+		{{ form_end(form, {'render_rest': false}) }}
+
+		<div class="text-center mt-3">
+			<form method="post" action="{{ path('workflow_action_delete', {'id': workflowAction.id}) }}" style="display: inline;">
+				<button type="submit" 
+						onclick="return confirm('Are you sure you want to delete this workflow action?');" 
+						class="btn btn-outline-danger">
+					{{ 'view_workflow_action.delete'| trans }}
+				</button>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+			var workflowTargetFieldUrl = "{{ path('get_target_fields', { 'ruleId': 'ruleFields' }) }}";
+			var targetFieldsData = {{ targetFieldsData|json_encode()|raw }};
+				window.workflowRuleMap = {
+				{% for wf in workflows %}
+					"{{ wf.id }}": "{{ wf.rule ? wf.rule.id : '' }}"{% if not loop.last %},{% endif %}
+				{% endfor %}
+				};
+
+				function syncChangeRuleFromWorkflow() {
+					var wf = document.getElementById('form_Workflow');
+					var sel = document.getElementById('form_ruleChangeData');
+					if (!wf || !sel) return;
+					var rid = (window.workflowRuleMap && window.workflowRuleMap[wf.value]) ? window.workflowRuleMap[wf.value] : '';
+					var opt = sel.options[0];
+					if (!opt) {
+					opt = document.createElement('option');
+					sel.appendChild(opt);
+					}
+					opt.value = rid;
+					opt.text  = (rid ? rid : '');
+					sel.value = rid;
+					if (window.jQuery && jQuery(sel).data('select2')) {
+					jQuery(sel).trigger('change.select2');
+					} else {
+					sel.dispatchEvent(new Event('change', { bubbles: true }));
+					}
+				}
+
+				document.addEventListener('DOMContentLoaded', function () {
+					syncChangeRuleFromWorkflow();
+					var wf = document.getElementById('form_Workflow');
+					if (wf) wf.addEventListener('change', syncChangeRuleFromWorkflow);
+				});
+
+		</script>
+	</div>
+{% endblock %}

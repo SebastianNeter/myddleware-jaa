@@ -1,0 +1,153 @@
+/*********************************************************************************
+ * This file is part of Myddleware.
+
+ * @package Myddleware
+ * @copyright Copyright (C) 2013 - 2015  St�phane Faure - CRMconsult EURL
+ * @copyright Copyright (C) 2015 - 2016  St�phane Faure - Myddleware ltd - contact@myddleware.com
+ * @link http://www.myddleware.com	
+ 
+ This file is part of Myddleware.
+ 
+ Myddleware is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Myddleware is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Myddleware.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************************/
+
+#user_account {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+}
+
+#user_account h2 {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #292707;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.edit-profile{
+    background-color: #f8f8f8;
+}
+
+.password-reset{
+    background-color: #ffffff;
+
+}
+.edit-profile,
+.password-reset {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.edit-profile {
+    margin-right: 2rem;
+}
+
+#user_account .input-group {
+    margin-bottom: 1.5rem;
+}
+
+#user_account .input-group label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #0069B4;
+    width: 100px;
+}
+
+#user_account .input-group input,
+#user_account .input-group select {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.3s ease;
+}
+
+#user_account .input-group input:focus,
+#user_account .input-group select:focus {
+    border-color: #0069B4;
+    outline: none;
+}
+
+#user_account button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 20px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#user_account .btn-primary {
+    background-color: #0069B4;
+    color: #ffffff;
+}
+
+#user_account .btn-primary:hover {
+    background-color: #004a80;
+}
+
+#user_account .btn-success {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+#user_account .btn-success:hover {
+    background-color: #1e7e34;
+} 
+
+#user_account .btn-group {
+    display: flex;
+    margin-right: 24.5rem;
+    margin-left: 24rem;
+    justify-content: center;
+}
+
+#user_account .btn-group button {
+    padding: 0.3rem 0.5rem;
+    font-size: 1rem;
+    width: auto;
+    white-space: nowrap;
+}
+
+.display-logs {
+    text-align: center;
+}
+
+.display-logs h2 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.display-logs button {
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    background-color: #0069B4;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.display-logs button:hover {
+    background-color: #004a80;
+}
+
+.password-reset-center{
+    text-align: center;
+}
