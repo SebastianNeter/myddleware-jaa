@@ -22,7 +22,7 @@ docker ps --format '{{.Names}}' | grep -qx "$DB_CONT"  || { echo "ERROR: no exis
 echo "OK"
 echo
 
-echo "== 1) Verifico que existan los archivos requeridos =="
+echo "== 1) Verifico archivos requeridos =="
 [ -f "$FILES_DIR/moodle_custom.php" ] || { echo "ERROR: falta $FILES_DIR/moodle_custom.php"; exit 2; }
 [ -f "$PATCH_DIR/01_solution_moodle_custom.sql" ] || { echo "ERROR: falta $PATCH_DIR/01_solution_moodle_custom.sql"; exit 2; }
 echo "OK"
@@ -37,14 +37,14 @@ if [ -f \"\$DST\" ]; then
   cp -a \"\$DST\" \"\$BK\"
   echo \"Backup: \$BK\"
 else
-  echo \"WARN: no existía \$DST (raro, pero sigo)\"
+  echo \"WARN: no existía \$DST (sigo igual)\"
 fi
 "
 docker cp "$FILES_DIR/moodle_custom.php" "$APP_CONT:/var/www/html/src/Solutions/moodle_custom.php"
 echo "OK"
 echo
 
-echo "== 2.1) Validación rápida (syntax + presencia de cambios esperados) =="
+echo "== 2.1) Validación rápida (syntax + strings esperadas) =="
 docker exec "$APP_CONT" bash -lc "
 set -e
 php -l /var/www/html/src/Solutions/moodle_custom.php >/dev/null
@@ -56,17 +56,20 @@ echo "OK"
 echo
 
 echo "== 3) Icono para moodle_custom (moodle_custom.png) =="
-docker exec "$APP_CONT" bash -lc '
+if [ -f "$FILES_DIR/moodle_custom.png" ]; then
+  echo "Usando icono custom del patch: $FILES_DIR/moodle_custom.png"
+  docker cp "$FILES_DIR/moodle_custom.png" "$APP_CONT:/var/www/html/public/build/images/solution/moodle_custom.png"
+else
+  echo "WARN: no hay icono custom en el patch. Copio el de moodle.png como fallback."
+  docker exec "$APP_CONT" bash -lc '
 set -e
 SRC="/var/www/html/public/build/images/solution/moodle.png"
 DST="/var/www/html/public/build/images/solution/moodle_custom.png"
-if [ ! -f "$SRC" ]; then
-  echo "ERROR: no existe $SRC"
-  exit 2
-fi
+[ -f "$SRC" ] || { echo "ERROR: no existe $SRC"; exit 2; }
 cp -f "$SRC" "$DST"
-ls -lah "$DST"
 '
+fi
+docker exec "$APP_CONT" bash -lc "ls -lh /var/www/html/public/build/images/solution/moodle_custom.png; file /var/www/html/public/build/images/solution/moodle_custom.png"
 echo "OK"
 echo
 
@@ -76,7 +79,7 @@ MYSQL_ROOT_PASSWORD_IN_CONT="$(docker exec "$DB_CONT" bash -lc 'printf "%s" "${M
 if [ -n "$MYSQL_ROOT_PASSWORD_IN_CONT" ]; then
   MYSQL_ROOT_PASSWORD="$MYSQL_ROOT_PASSWORD_IN_CONT"
 elif [ -n "${MYSQL_ROOT_PASSWORD:-}" ]; then
-  : # ya viene del entorno del host
+  : # viene del entorno del host
 else
   echo "ERROR: no pude obtener MYSQL_ROOT_PASSWORD."
   echo "Solución: ejecutá así:"
