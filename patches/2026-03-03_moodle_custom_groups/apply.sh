@@ -55,24 +55,6 @@ echo 'OK: syntax + strings esperadas presentes'
 echo "OK"
 echo
 
-echo "== 3) Icono para moodle_custom (moodle_custom.png) =="
-if [ -f "$FILES_DIR/moodle_custom.png" ]; then
-  echo "Usando icono custom del patch: $FILES_DIR/moodle_custom.png"
-  docker cp "$FILES_DIR/moodle_custom.png" "$APP_CONT:/var/www/html/public/build/images/solution/moodle_custom.png"
-else
-  echo "WARN: no hay icono custom en el patch. Copio el de moodle.png como fallback."
-  docker exec "$APP_CONT" bash -lc '
-set -e
-SRC="/var/www/html/public/build/images/solution/moodle.png"
-DST="/var/www/html/public/build/images/solution/moodle_custom.png"
-[ -f "$SRC" ] || { echo "ERROR: no existe $SRC"; exit 2; }
-cp -f "$SRC" "$DST"
-'
-fi
-docker exec "$APP_CONT" bash -lc "ls -lh /var/www/html/public/build/images/solution/moodle_custom.png; file /var/www/html/public/build/images/solution/moodle_custom.png"
-echo "OK"
-echo
-
 echo "== 4) DB: asegurar row solution moodle_custom (idempotente) =="
 MYSQL_ROOT_PASSWORD_IN_CONT="$(docker exec "$DB_CONT" bash -lc 'printf "%s" "${MYSQL_ROOT_PASSWORD:-}"' || true)"
 
