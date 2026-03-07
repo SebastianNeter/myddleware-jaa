@@ -1509,6 +1509,11 @@ class DocumentManager
             } else {
                 $fields = $this->ruleFields;
             }
+            // Initialize $dataInsert to avoid TypeError in PHP 8 when all ruleFields are my_value.
+            // my_value fields are skipped in the loop below, so without this line $dataInsert
+            // remains undefined. The filter loop at line ~1569 then calls array_key_exists() on
+            // a null/undefined variable → TypeError in PHP 8 (in PHP 7 it was only a warning).
+            $dataInsert = [];
             // We save only fields which belong to the rule
             if (!empty($fields)) {
                 foreach ($fields as $ruleField) {
