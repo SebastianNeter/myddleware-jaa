@@ -1,0 +1,29 @@
+diff --git a/src/Solutions/moodle.php b/src/Solutions/moodle.php
+index 9976358..83a6436 100644
+--- a/src/Solutions/moodle.php
++++ b/src/Solutions/moodle.php
+@@ -43,7 +43,7 @@ class moodle extends solution
+         'get_user_grades' => ['id', 'timemodified'],
+         'get_quiz_attempts' => ['id', 'timemodified'],
+         'groups' => ['id', 'timemodified'],
+-        'group_members' => ['id', 'timeadded'],
++        'group_members' => ['id', 'groupid', 'userid', 'timeadded'],
+     ];
+ 
+     protected array $FieldsDuplicate = [
+@@ -574,9 +574,14 @@ class moodle extends solution
+ 				}
+ 			}
+ 		}
++		// Construct composite ID for group_members to match createData/updateData format (groupid_userid).
++		// Without this, read returns the internal PK which breaks bidirectional rule lookup.
++		if ($param['module'] === 'group_members' && !empty($row['groupid']) && !empty($row['userid'])) {
++			$row['id'] = $row['groupid'] . '_' . $row['userid'];
++		}
+ 		return array($row);
+ 	}
+-	
++
+ 	// Check data before update
+     // Add a throw exeption if error
+     protected function checkDataBeforeUpdate($param, $data, $idDoc=null)
