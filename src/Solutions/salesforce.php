@@ -40,6 +40,7 @@ class salesforce extends solution {
 										'Contact' => array('Email','LastName'),
 										'Lead' => array('Email','LastName'),
 										'Account' => array('Email', 'Name'),
+										'Junction_Curso_Contacto__c' => array('Completion_Key_Ext__c'),
 										'default' => array('Name')
 									  );
 

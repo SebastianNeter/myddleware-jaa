@@ -4,203 +4,80 @@ This folder contains local hotfixes applied on top of the upstream Myddleware im
 
 ## Applied patches
 
-### 2026-02-04 --- moodle.php getRuleMode override removed
-File: /var/www/html/src/Solutions/moodle.php
+### 2026-02-04 — moodle.php getRuleMode override removed
 
-Why:
-- In the Rule UI, "Mode" for Moodle target module "groups" only showed "Create data only".
-- This prevented selecting the default modes and caused inconsistent behavior.
+**File**: `/var/www/html/src/Solutions/moodle.php`
 
-Fix:
-- Remove Moodle connector override of getRuleMode() so it delegates to the base Solution::getRuleMode().
+**Why**: In the Rule UI, "Mode" for Moodle target module "groups" only showed "Create data only". This prevented selecting the default modes and caused inconsistent behavior.
 
-Patch file:
-- patches/patch_moodle_getRuleMode_2026-02-04.diff
+**Fix**: Remove Moodle connector override of `getRuleMode()` so it delegates to the base `Solution::getRuleMode()`.
+
+**Patch file**: `patches/patch_moodle_getRuleMode_2026-02-04.diff`
+
+---
+
+### 2026-03-03 — moodle_custom connector (groups + icon)
+
+**Directory**: `patches/2026-03-03_moodle_custom_groups/`
+
+**Why**: Added `moodle_custom` connector with group custom fields support and custom icon.
+
+**Note**: Group custom fields support has been ported to the standard `moodle` connector. The `moodle_custom` connector is deprecated — rules have been migrated to standard `moodle`.
+
+---
+
+### 2026-03-23 — Moodle completion enhancements
+
+**Directory**: `patches/2026-03-23_moodle_completion_enhancements/`
+
+**Target**: Moodle plugin container (`/var/www/html/local/myddleware/`)
+
+**Changes**:
+1. **Rename `id` → `userid_courseid`** in `get_course_completion_percentage` — fixes Moodle REST pipeline rejecting composite IDs
+2. **New method `get_course_completion_percentage_by_country`** — filters completions by user country profile field for multi-country SF sync
+3. **services.php** — register new function
+4. **version.php** — bump to `2025061806`
+
+**Companion repo changes** (committed directly, not patch):
+- `src/Solutions/moodle.php`: connector support for both changes + group_custom_fields port
+- `src/Solutions/lib/moodle/metadata.php`: field definitions for new module
+- `src/Solutions/salesforce.php`: `Junction_Curso_Contacto__c` in `FieldsDuplicate`
+- `config/packages/doctrine.yaml`: `use_savepoints: true`
+
+---
 
 ## Re-apply after an upgrade
-1) Copy patch into container:
-   docker compose cp patches/patch_moodle_getRuleMode_2026-02-04.diff myddleware:/tmp/
 
-2) Apply patch:
-   docker compose exec myddleware sh -lc 'patch -p0 < /tmp/patch_moodle_getRuleMode_2026-02-04.diff'
+### getRuleMode patch
+```bash
+docker compose cp patches/patch_moodle_getRuleMode_2026-02-04.diff myddleware:/tmp/
+docker compose exec myddleware sh -lc 'patch -p0 < /tmp/patch_moodle_getRuleMode_2026-02-04.diff'
+docker compose exec myddleware sh -lc 'php -l /var/www/html/src/Solutions/moodle.php'
+```
 
-3) Validate syntax:
-   docker compose exec myddleware sh -lc 'php -l /var/www/html/src/Solutions/moodle.php'
-
-4) Reset opcache + reload apache:
-   docker compose exec myddleware sh -lc 'php -r "opcache_reset();" >/dev/null 2>&1 || true; service apache2 reload || service apache2 restart'
-
----
-
-## Estándar de Assets en Patches
-
-### Objetivo
-Permitir que un patch incluya assets (por ejemplo íconos PNG) y que se instalen automáticamente al aplicar el patch.
-
-### Convenciones de carpetas
-
-#### 1) files/
-Uso: archivos que el `apply.sh` del patch copia explícitamente.
-
-Ejemplo:
-patches/<PATCH_ID>/files/moodle_custom.php  
-patches/<PATCH_ID>/files/moodle_custom.png  
-
-Caso típico:
-Si existe `files/moodle_custom.png`, el patch lo copia a:
-
-/var/www/html/public/build/images/solution/moodle_custom.png
+### Completion enhancements (Moodle container)
+See `patches/2026-03-23_moodle_completion_enhancements/README.md`
 
 ---
 
-#### 2) assets/
-Uso: copiar automáticamente un árbol de assets preservando estructura.
+## Patch conventions
 
-Regla:
+### Directory structure
+```
+patches/<PATCH_ID>/
+├── README.md          # Documentation
+├── apply.sh           # Apply script for Myddleware container
+├── apply_moodle.sh    # Apply script for Moodle container (if applicable)
+├── files/             # Code snippets/hotfixes copied explicitly by apply script
+└── assets/            # Auto-copied to /var/www/html/public/build/ preserving structure
+```
 
-patches/<PATCH_ID>/assets/<ruta_relativa>
-
-se copia a
-
-/var/www/html/public/build/<ruta_relativa>
-
-Ejemplo:
-
-Repo:
-patches/<PATCH_ID>/assets/images/solution/moodle_custom.png
-
-Container:
-/var/www/html/public/build/images/solution/moodle_custom.png
-
-Esto lo ejecuta automáticamente `patch_apply_assets` desde:
-
-patches/apply_patch.sh
-
----
-
-### Aplicar un patch
-
-Desde el servidor:
+### Applying a patch
+```bash
 cd ~/myddleware-jaa
 patches/apply_patch.sh <PATCH_ID>
+```
 
----
-
-### Notas
-
---� El nombre del icono debe coincidir con el nombre de la solution.  
-  Ejemplo: `moodle_custom` -�� `moodle_custom.png`.
-
---� Si el icono no aparece inmediatamente, suele ser cache del navegador.  
-  Hacer hard refresh o abrir en incógnito.
-
-EOF+
-cat <<'EOF' >> patches/README.md
-
----
-
-## Estándar de Assets en Patches
-
-### Objetivo
-Permitir que un patch incluya assets (por ejemplo íconos PNG) y que se instalen automáticamente al aplicar el patch.
-
-### Convenciones de carpetas
-
-#### 1) files/
-Uso: archivos que el `apply.sh` del patch copia explícitamente.
-
-Ejemplo:
-patches/<PATCH_ID>/files/moodle_custom.php  
-patches/<PATCH_ID>/files/moodle_custom.png  
-
-Caso típico:
-Si existe `files/moodle_custom.png`, el patch lo copia a:
-
-/var/www/html/public/build/images/solution/moodle_custom.png
-
----
-
-#### 2) assets/
-Uso: copiar automáticamente un árbol de assets preservando estructura.
-
-Regla:
-
-patches/<PATCH_ID>/assets/<ruta_relativa>
-
-se copia a
-
-/var/www/html/public/build/<ruta_relativa>
-
-Ejemplo:
-
-Repo:
-patches/<PATCH_ID>/assets/images/solution/moodle_custom.png
-
-Container:
-/var/www/html/public/build/images/solution/moodle_custom.png
-
-Esto lo ejecuta automáticamente `patch_apply_assets` desde:
-
-patches/apply_patch.sh
-
----
-
-### Aplicar un patch
-
-Desde el servidor:
-cd ~/myddleware-jaa
-patches/apply_patch.sh <PATCH_ID>
-
----
-
-### Notas
-
---� El nombre del icono debe coincidir con el nombre de la solution.  
-  Ejemplo: `moodle_custom` -�� `moodle_custom.png`.
-
---� Si el icono no aparece inmediatamente, suele ser cache del navegador.  
-  Hacer hard refresh o abrir en incógnito.
-
-
----
-
-## Estándar de Assets en Patches
-
-### Objetivo
-Permitir que un patch incluya assets (por ejemplo íconos PNG) y que se instalen automáticamente al aplicar el patch.
-
-### Convenciones de carpetas
-
-#### 1) assets/
-Uso: copiar automáticamente un árbol de assets preservando estructura.
-
-Regla:
-- Repo: `patches/<PATCH_ID>/assets/<ruta_relativa>`
-- Container: `/var/www/html/public/build/<ruta_relativa>`
-
-Ejemplo (ícono de solution):
-- Repo: `patches/<PATCH_ID>/assets/images/solution/moodle_custom.png`
-- Container: `/var/www/html/public/build/images/solution/moodle_custom.png`
-
-Esto lo instala automáticamente `patch_apply_assets` cuando corrés:
-`patches/apply_patch.sh <PATCH_ID>`
-
-#### 2) files/
-Uso: archivos que el `apply.sh` del patch copia explícitamente (hotfixes de PHP/SQL/etc).
-
-Ejemplo:
-- `patches/<PATCH_ID>/files/moodle_custom.php`
-
-Recomendación:
-- Usar `assets/` para imágenes (íconos, etc.)
-- Usar `files/` para código/SQL que el patch aplica con lógica propia.
-
-### Aplicar un patch
-Desde el servidor:
-- `cd ~/myddleware-jaa`
-- `patches/apply_patch.sh <PATCH_ID>`
-
-### Notas
-- El nombre del icono debe coincidir con el nombre de la solution: `moodle_custom` → `moodle_custom.png`.
-- Si el icono no aparece inmediatamente, suele ser cache del navegador: hard refresh o incógnito.
-
+### Notes
+- Icon names must match solution name: `moodle_custom` → `moodle_custom.png`
+- If icons don't appear, hard refresh or use incognito

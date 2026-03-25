@@ -36,7 +36,8 @@ class moodle extends solution
     protected array $required_fields = [
         'default' => ['id'],
         'get_users_statistics_by_date' => ['id', 'timemodified'],
-        'get_course_completion_percentage' => ['id', 'timecompleted', 'timemodified'],
+        'get_course_completion_percentage' => ['userid_courseid', 'timecompleted', 'timemodified'],
+        'get_course_completion_percentage_by_country' => ['id', 'timemodified'],
         'get_users_completion' => ['id', 'timemodified'],
         'get_users_last_access' => ['id', 'lastaccess'],
         'get_course_completion_by_date' => ['id', 'timecompleted'],
@@ -110,6 +111,11 @@ class moodle extends solution
                 'type' => TextType::class,
                 'label' => 'solution.fields.course_custom_fields',
             ],
+			[
+                'name' => 'group_custom_fields',
+                'type' => TextType::class,
+                'label' => 'solution.fields.group_custom_fields',
+            ],
         ];
     }
 
@@ -125,6 +131,7 @@ class moodle extends solution
                     'get_users_last_access' => 'Get users last access',
                     'get_users_statistics_by_date' => 'Get users statistics',
                     'get_course_completion_percentage' => 'Get course completion percentage',
+                    'get_course_completion_percentage_by_country' => 'Get course completion percentage by country',
                     'get_enrolments_by_date' => 'Get enrolments',
                     'get_course_completion_by_date' => 'Get course completion',
                     'get_user_compentencies_by_date' => 'Get user compentency',
@@ -269,12 +276,12 @@ class moodle extends solution
 						// Param names are differents depending on the module
 						if($param['module'] == 'users') {
 							$customField->type = $key;
-						} elseif($param['module'] == 'courses') {
-							$customField->shortname = $key; 
+						} elseif(in_array($param['module'], ['courses','groups'])) {
+							$customField->shortname = $key;
 						}
 						$customField->value = $value;
 						$obj->customfields[] = $customField;
-						
+
 					} else {
 						$obj->$key = $value;
 					}
@@ -431,7 +438,7 @@ class moodle extends solution
 						// Param names are differents depending on the module
 						if($param['module'] == 'users') {
 							$customField->type = $key;
-						} elseif($param['module'] == 'courses') {
+						} elseif(in_array($param['module'], ['courses','groups'])) {
 							$customField->shortname = $key;
 						}
 						$customField->value = $value;
@@ -540,7 +547,7 @@ class moodle extends solution
 				$row[$custom] = '';
 			}
 		}
-		$attributeValue = ($param['module'] == 'courses'? 'valueraw' : 'value');
+		$attributeValue = (in_array($param['module'], ['courses','groups']) ? 'valueraw' : 'value');
 		foreach ($data as $field) {
 			// Get all the requested fields
 			if (array_search($field->attributes()->__toString(), $param['fields']) !== false) {
@@ -716,8 +723,11 @@ class moodle extends solution
                 throw new \Exception('Filter criteria empty. Not allowed to run function '.$functionName.' without filter criteria.');
             }
         } 
-		elseif (!empty($param['query']['id'])) {
-            $parameters['id'] = $param['query']['id'];
+		elseif (!empty($param['query']['userid_courseid'])) {
+            $parameters['userid_courseid'] = $param['query']['userid_courseid'];
+        }
+		elseif ($functionName == 'local_myddleware_get_course_completion_percentage_by_country') {
+            $parameters['country_filter'] = $param['ruleParams']['country_filter'] ?? '';
         }
 
         return $parameters;
@@ -752,7 +762,7 @@ class moodle extends solution
 
     // Get the custom fields depending on the module
     protected function getCustomFields ($param) {
-        // User and course Moodle fields aren't stored in the same parameter
+        // User, course and group Moodle fields aren't stored in the same parameter
         if (
                 $param['module'] == 'users'
             AND !empty($this->paramConnexion['user_custom_fields'])
@@ -764,6 +774,12 @@ class moodle extends solution
             AND !empty($this->paramConnexion['course_custom_fields'])
         ) {
             return explode(',',$this->paramConnexion['course_custom_fields']);
+        }
+        if (
+                $param['module'] == 'groups'
+            AND !empty($this->paramConnexion['group_custom_fields'])
+        ) {
+            return explode(',',$this->paramConnexion['group_custom_fields']);
         }
         return array();
     }
@@ -783,6 +799,11 @@ class moodle extends solution
 			AND !empty($this->paramConnexion['course_custom_fields'])
 		) {
 			$customFields = explode(',',$this->paramConnexion['course_custom_fields']);
+		} elseif (
+				$module == 'groups'
+			AND !empty($this->paramConnexion['group_custom_fields'])
+		) {
+			$customFields = explode(',',$this->paramConnexion['group_custom_fields']);
 		}
 		// Add the custom fields in the attribute $moduleFields
 		if (!empty($customFields)) {
@@ -933,6 +954,31 @@ class moodle extends solution
 	 * @param string $moduleName The Moodle module name
 	 * @return string The URL path (e.g., '/user/profile.php') or empty string if not supported
 	 */
+
+	// Expose country_filter parameter in rule UI for completion by country module
+	public function getFieldsParamUpd($type, $module): array
+	{
+		$params = [];
+		if ($type === 'source' && $module === 'get_course_completion_percentage_by_country') {
+			$params['country_filter'] = [
+				'id' => 'country_filter',
+				'name' => 'country_filter',
+				'required' => true,
+				'type' => 'option',
+				'label' => 'Country profile field',
+				'option' => [
+					'arg' => 'ARG - Argentina',
+					'roc' => 'ROC - Americas Regional Operating Center',
+					'mex' => 'MEX - Mexico',
+					'ury' => 'URY - Uruguay',
+					'col' => 'COL - Colombia',
+					'per' => 'PER - Peru',
+				],
+			];
+		}
+		return $params;
+	}
+
 	private function determineMoodleUrlPath(string $moduleName): string
 	{
 		// Map Moodle module names to their URL paths
