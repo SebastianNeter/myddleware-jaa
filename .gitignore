@@ -148,3 +148,6 @@ public/*.hostbak*
 # --- Myddleware Premium (PRIVATE / LICENSED) ---
 /src/Premium/
 /src/Premium/**
+
+# Local DB backups (no commitear dumps con datos reales)
+data/*.sql

@@ -14,6 +14,19 @@ mkdir -p /var/log
   chown -R www-data:www-data var/log
   echo "[OK] Directory permissions set"
 
+  ## Generate .env for Symfony from container environment variables
+  ## (The .env file is gitignored; we generate it at runtime from docker-compose env vars)
+  echo "[START] Generating .env from environment..."
+  cat > /var/www/html/.env << ENVEOF
+APP_ENV=${APP_ENV:-prod}
+APP_DEBUG=${APP_DEBUG:-0}
+APP_SECRET=${APP_SECRET:-changeme_set_a_real_secret}
+DATABASE_URL=${DATABASE_URL:-mysql://root:secret@mysql:3306/myddleware?serverVersion=8.0}
+CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN:-^https?://(localhost|127\\.0\\.0\\.1)(:[0-9]+)?$}
+MYDDLEWARE_VERSION=${MYDDLEWARE_VERSION:-dev}
+ENVEOF
+  echo "[OK] .env generated"
+
   ## Extend Hosts
   echo "[START] Updating hosts file..."
   if [ -f hosts ]; then
