@@ -34,6 +34,7 @@ final class CronRunCommand extends Command
 {
     private CommandHelper $commandHelper;
     protected EntityManagerInterface $entityManager;
+    private ManagerRegistry $registry;
     private ToolsManager $toolsManager;
     private CronJobRepository $cronJobRepository;
 
@@ -47,6 +48,7 @@ final class CronRunCommand extends Command
 
         $this->commandHelper = $commandHelper;
         $this->entityManager = $entityManager;
+        $this->registry = $registry;
         $this->toolsManager = $toolsManager;
         $this->cronJobRepository = $registry->getRepository(CronJob::class);
     }
@@ -162,10 +164,34 @@ final class CronRunCommand extends Command
                 }
 
                 $job = $running->cronJob;
-                $job->decreaseRunningInstances();
 
-                $em->persist($job);
-                $em->flush();
+                try {
+                    // Ensure EntityManager is open (same pattern as SynchroCommand)
+                    if (!$em->isOpen()) {
+                        $em = $this->entityManager = $this->registry->resetManager();
+                    }
+
+                    // Re-fetch entity from current EntityManager context
+                    $freshJob = $em->find(CronJob::class, $job->getId());
+                    if ($freshJob !== null) {
+                        $freshJob->decreaseRunningInstances();
+                        $em->persist($freshJob);
+                        $em->flush();
+                    }
+                } catch (\Exception $e) {
+                    // ORM failed — fallback to raw SQL to ensure counter is decremented
+                    try {
+                        if (!$em->isOpen()) {
+                            $em = $this->entityManager = $this->registry->resetManager();
+                        }
+                        $em->getConnection()->executeStatement(
+                            'UPDATE cron_job SET running_instances = GREATEST(running_instances - 1, 0) WHERE id = ?',
+                            [$job->getId()]
+                        );
+                    } catch (\Exception $e2) {
+                        // DB completely unreachable — nothing more we can do
+                    }
+                }
 
                 unset($processes[$key]);
             }

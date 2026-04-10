@@ -41,7 +41,7 @@ class salesforce extends solution {
 										'Lead' => array('Email','LastName'),
 										'Account' => array('Email', 'Name'),
 										'Junction_Curso_Contacto__c' => array('Completion_Key_Ext__c'),
-										'default' => array('Name')
+																'default' => array('Name')
 									  );
 
 	protected $required_relationships = array(

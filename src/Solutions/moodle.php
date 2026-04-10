@@ -44,7 +44,7 @@ class moodle extends solution
         'get_user_grades' => ['id', 'timemodified'],
         'get_quiz_attempts' => ['id', 'timemodified'],
         'groups' => ['id', 'timemodified'],
-        'group_members' => ['id', 'timeadded'],
+        'group_members' => ['id', 'groupid', 'userid', 'timeadded'],
     ];
 
     protected array $FieldsDuplicate = [
@@ -281,7 +281,7 @@ class moodle extends solution
 						}
 						$customField->value = $value;
 						$obj->customfields[] = $customField;
-						
+
 					} else {
 						$obj->$key = $value;
 					}
@@ -581,9 +581,14 @@ class moodle extends solution
 				}
 			}
 		}
+		// Construct composite ID for group_members to match createData/updateData format (groupid_userid).
+		// Without this, read returns the internal PK which breaks bidirectional rule lookup.
+		if ($param['module'] === 'group_members' && !empty($row['groupid']) && !empty($row['userid'])) {
+			$row['id'] = $row['groupid'] . '_' . $row['userid'];
+		}
 		return array($row);
 	}
-	
+
 	// Check data before update
     // Add a throw exeption if error
     protected function checkDataBeforeUpdate($param, $data, $idDoc=null)
@@ -723,18 +728,14 @@ class moodle extends solution
                 throw new \Exception('Filter criteria empty. Not allowed to run function '.$functionName.' without filter criteria.');
             }
         } 
-		elseif ($functionName == 'local_myddleware_get_course_completion_percentage' && !empty($param['query']['userid_courseid'])) {
+		elseif (!empty($param['query']['userid_courseid'])) {
             $parameters['userid_courseid'] = $param['query']['userid_courseid'];
         }
-		elseif ($functionName == 'local_myddleware_get_course_completion_percentage_by_country') {
-            if (!empty($param['ruleParams']['country_filter'])) {
-                $parameters['country_filter'] = $param['ruleParams']['country_filter'];
-            }
-        }
-		elseif (!empty($param['query']['id'])) {
-            $parameters['id'] = $param['query']['id'];
-        }
 
+        // Custom: pass country_filter for get_course_completion_percentage_by_country
+        if (!empty($param['ruleParams']['country_filter'])) {
+            $parameters['country_filter'] = $param['ruleParams']['country_filter'];
+        }
         return $parameters;
     }
 
@@ -978,28 +979,30 @@ class moodle extends solution
 		return $urlPath;
 	}
 
-	// Expose configurable rule parameters for specific modules
-	public function getFieldsParamUpd($type, $module): array
-	{
-		$params = parent::getFieldsParamUpd($type, $module);
-		if ($type === 'source' && $module === 'get_course_completion_percentage_by_country') {
-			$params[] = [
-				'id'       => 'country_filter',
-				'name'     => 'country_filter',
-				'type'     => 'option',
-				'label'    => 'Country filter',
-				'required' => true,
-				'option'   => [
-					'arg' => 'ARG - Argentina',
-					'roc' => 'ROC - Americas Regional Operating Center',
-					'mex' => 'MEX - México',
-					'ury' => 'URY - Uruguay',
-					'col' => 'COL - Colombia',
-					'per' => 'PER - Perú',
-				],
-			];
-		}
-		return $params;
-	}
+
+
+    // Custom: expose country_filter parameter for get_course_completion_percentage_by_country (JAA patch)
+    public function getFieldsParamUpd($type, $module): array
+    {
+        $params = parent::getFieldsParamUpd($type, $module);
+        if ("source" === $type && "get_course_completion_percentage_by_country" === $module) {
+            $params[] = [
+                "id" => "country_filter",
+                "name" => "country_filter",
+                "type" => "option",
+                "label" => "Country filter (user profile field)",
+                "required" => true,
+                "option" => [
+                    "arg" => "ARG - Argentina",
+                    "roc" => "ROC - Americas Regional Operating Center",
+                    "mex" => "MEX - México",
+                    "ury" => "URY - Uruguay",
+                    "col" => "COL - Colombia",
+                    "per" => "PER - Perú",
+                ],
+            ];
+        }
+        return $params;
+    }
 
 }
