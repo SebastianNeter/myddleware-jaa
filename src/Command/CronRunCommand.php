@@ -25,7 +25,6 @@ use App\Entity\Config;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Manager\ToolsManager;
-
 #[AsCommand(
     name: 'myddleware:cronrun',
     description: 'Runs any currently schedule cron jobs'
@@ -103,14 +102,22 @@ final class CronRunCommand extends Command
                     continue;
                 }
     
-                $job->increaseRunningInstances();
+                // Atomic SQL increment — immune to race conditions between concurrent parents
+                $em->getConnection()->executeStatement(
+                    'UPDATE cron_job SET running_instances = running_instances + 1 WHERE id = ?',
+                    [$job->getId()]
+                );
+
                 $process = $this->runJob($job);
-    
+
                 $job->calculateNextRun();
                 $job->setLastUse($now);
-    
+
                 $em->persist($job);
                 $em->flush();
+
+                // Refresh entity so in-memory value reflects the atomic DB change
+                $em->refresh($job);
     
                 $processes[] = new CronJobRunning($job, $process);
     
@@ -158,32 +165,27 @@ final class CronRunCommand extends Command
                     $process->checkTimeout();
 
                     if ($process->isRunning() === true) {
-                        break;
+                        continue;
                     }
                 } catch (ProcessTimedOutException $e) {
                 }
 
                 $job = $running->cronJob;
 
+                // Atomic SQL decrement — immune to race conditions between concurrent parents.
+                // Uses GREATEST to prevent underflow below 0.
                 try {
-                    // Ensure EntityManager is open (same pattern as SynchroCommand)
                     if (!$em->isOpen()) {
                         $em = $this->entityManager = $this->registry->resetManager();
                     }
-
-                    // Re-fetch entity from current EntityManager context
-                    $freshJob = $em->find(CronJob::class, $job->getId());
-                    if ($freshJob !== null) {
-                        $freshJob->decreaseRunningInstances();
-                        $em->persist($freshJob);
-                        $em->flush();
-                    }
+                    $em->getConnection()->executeStatement(
+                        'UPDATE cron_job SET running_instances = GREATEST(running_instances - 1, 0) WHERE id = ?',
+                        [$job->getId()]
+                    );
                 } catch (\Exception $e) {
-                    // ORM failed — fallback to raw SQL to ensure counter is decremented
+                    // DB unreachable — try once more with a fresh manager
                     try {
-                        if (!$em->isOpen()) {
-                            $em = $this->entityManager = $this->registry->resetManager();
-                        }
+                        $em = $this->entityManager = $this->registry->resetManager();
                         $em->getConnection()->executeStatement(
                             'UPDATE cron_job SET running_instances = GREATEST(running_instances - 1, 0) WHERE id = ?',
                             [$job->getId()]
