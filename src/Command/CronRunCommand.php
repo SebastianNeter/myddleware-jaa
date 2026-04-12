@@ -102,11 +102,21 @@ final class CronRunCommand extends Command
                     continue;
                 }
     
-                // Atomic SQL increment — immune to race conditions between concurrent parents
-                $em->getConnection()->executeStatement(
-                    'UPDATE cron_job SET running_instances = running_instances + 1 WHERE id = ?',
+                // Atomic check-and-increment: only proceed if running < max.
+                // Single SQL prevents race conditions between concurrent cronrun parents.
+                $affected = $em->getConnection()->executeStatement(
+                    'UPDATE cron_job SET running_instances = running_instances + 1 WHERE id = ? AND running_instances < max_instances',
                     [$job->getId()]
                 );
+
+                if ($affected === 0) {
+                    $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
+                    // Still update next_run so it doesn't retry immediately
+                    $job->calculateNextRun();
+                    $em->persist($job);
+                    $em->flush();
+                    continue;
+                }
 
                 $process = $this->runJob($job);
 
@@ -116,16 +126,8 @@ final class CronRunCommand extends Command
                 $em->persist($job);
                 $em->flush();
 
-                // Refresh entity so in-memory value reflects the atomic DB change
-                $em->refresh($job);
-    
                 $processes[] = new CronJobRunning($job, $process);
-    
-                if ($job->getRunningInstances() > $job->getMaxInstances()) {
-                    $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
-                } else {
-                    $style->success('cronjob started successfully and is running in background');
-                }
+                $style->success('cronjob started successfully and is running in background');
             }
 			
 			sleep(1);
