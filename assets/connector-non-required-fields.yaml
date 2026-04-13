@@ -1,3 +1,4 @@
 non-required-fields:
   - user_custom_fields
   - course_custom_fields
+  - group_custom_fields

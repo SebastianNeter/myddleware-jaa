@@ -1290,11 +1290,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
                             $nonRequiredFields = $this->getNonRequiredFields();
 
                             // Vérification du nombre de champs
-                            // Special exception for Moodle: allow connection if $param has 3 elements but $solution->getFieldsLogin() has 4
-                            $isValidFieldCount = count($param) == count($solution->getFieldsLogin()) || count($param) == count($solution->getFieldsLogin()) - count($nonRequiredFields);
-                            if ($classe === "moodle" && count($param) == 3 && count($solution->getFieldsLogin()) == 4) {
-                                $isValidFieldCount = true;
-                            }
+                            // Allow any count between required minimum and total fields (some optional fields may be filled)
+                            $requiredFieldCount = count($solution->getFieldsLogin()) - count($nonRequiredFields);
+                            $isValidFieldCount = count($param) >= $requiredFieldCount && count($param) <= count($solution->getFieldsLogin());
 
                             if (isset($param) && $isValidFieldCount) {
                                 $result = $solution->login($param);
