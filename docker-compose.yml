@@ -22,6 +22,8 @@ services:
 
   mysql:
     image: mysql:8.4.7
+    ports:
+      - ${mysql_bind_ip:-127.0.0.1}:3306:3306
     environment:
       - MYSQL_DATABASE=myddleware
       - MYSQL_ROOT_PASSWORD=${mysql_root_password:-secret}
@@ -29,7 +31,7 @@ services:
       - MYSQL_PASSWORD=${mysql_password:-secret}
     command: 
       - --max_allowed_packet=524288000
-      - --wait_timeout=100
+      - --wait_timeout=900
       - --innodb_buffer_pool_size=1G
       - --innodb_flush_method=O_DIRECT
       - --innodb_flush_log_at_trx_commit=2
@@ -46,4 +48,6 @@ services:
     restart: always
 
 volumes:
-  mysql_data: null
+  mysql_data:
+    external: true
+    name: myddleware_mysql_data

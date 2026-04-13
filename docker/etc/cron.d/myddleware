@@ -9,3 +9,8 @@ SHELL=/bin/bash
 
 # Monitor running jobs every minute - disabled until myddleware-monitor.sh is implemented
 # * * * * * root /usr/local/bin/myddleware-monitor.sh >> /var/log/myddleware-monitor.log 2>&1
+
+# JAA: Run cron scheduler every minute (uses atomic SQL fix in CronRunCommand.php)
+# IMPORTANT: must be myddleware:cronrun (NOT shapecode:cron:run) to use the atomic running_instances fix
+* * * * * www-data cd /var/www/html && /usr/local/bin/php bin/console myddleware:cronrun --env=prod >> /var/log/myddleware-cron.log 2>&1
+
