@@ -731,6 +731,21 @@ class moodle extends solution
 		elseif (!empty($param['query']['userid_courseid'])) {
             $parameters['userid_courseid'] = $param['query']['userid_courseid'];
         }
+        // Pass the target id when fetching a specific record by id using the
+        // local_myddleware_get_X_by_date functions. Without this, Myddleware would
+        // call the function with only time_modified, which reads too many records
+        // and makes Moodle return invalidresponse.
+        elseif (
+                !empty($param['query']['id'])
+            AND in_array($functionName, [
+                    'local_myddleware_get_users_by_date',
+                    'local_myddleware_get_courses_by_date',
+                    'local_myddleware_get_groups_by_date',
+                    'local_myddleware_get_group_members_by_date',
+                ])
+        ) {
+            $parameters['id'] = $param['query']['id'];
+        }
 
         // Custom: pass country_filter for get_course_completion_percentage_by_country
         if (!empty($param['ruleParams']['country_filter'])) {
