@@ -1170,10 +1170,27 @@ class DocumentManager
                 if (empty($target)) {
                     throw new \Exception('Failed to search duplicate data in the target system because there is no target data in this data transfer. This document is queued. ');
                 }
-                // Prepare the search array with teh value for each duplicate field
-				$searchFields = $this->prepareSearchFields($duplicate_fields, $target);
-                if (!empty($searchFields)) {
-                    $history = $this->getDocumentHistory($searchFields);
+                // Try each duplicate field individually as a fallback chain (OR logic).
+                // First field that finds a match wins. This handles cases where a record
+                // exists in the target with a different value for the primary key but can
+                // still be matched by a secondary field (e.g. username differs but email matches).
+                $searchFields = [];
+                if (count($duplicate_fields) > 1) {
+                    foreach ($duplicate_fields as $singleField) {
+                        $searchFields = $this->prepareSearchFields([$singleField], $target);
+                        if (!empty($searchFields)) {
+                            $history = $this->getDocumentHistory($searchFields);
+                            if ($history !== false && $history !== -1) {
+                                break; // Found a match, stop searching
+                            }
+                        }
+                    }
+                } else {
+                    // Single field: original behavior (no change)
+                    $searchFields = $this->prepareSearchFields($duplicate_fields, $target);
+                    if (!empty($searchFields)) {
+                        $history = $this->getDocumentHistory($searchFields);
+                    }
                 }
 
                 if (-1 === $history) {
