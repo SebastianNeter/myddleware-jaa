@@ -735,14 +735,15 @@ class moodle extends solution
         // local_myddleware_get_X_by_date functions. Without this, Myddleware would
         // call the function with only time_modified, which reads too many records
         // and makes Moodle return invalidresponse.
+        // NOTE: only for modules with simple integer IDs (users, courses).
+        // group_members uses composite IDs (groupid_userid) that Moodle rejects.
         elseif (
                 !empty($param['query']['id'])
             AND in_array($functionName, [
                     'local_myddleware_get_users_by_date',
                     'local_myddleware_get_courses_by_date',
-                    'local_myddleware_get_groups_by_date',
-                    'local_myddleware_get_group_members_by_date',
                 ])
+            AND is_numeric($param['query']['id'])
         ) {
             $parameters['id'] = $param['query']['id'];
         }
