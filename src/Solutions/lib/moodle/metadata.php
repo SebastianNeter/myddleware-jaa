@@ -391,4 +391,72 @@ $moduleFields = [
         'percentage' => ['label' => 'Percentage', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
         'timemodified' => ['label' => 'Time modified', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
     ],
+
+    // Custom: get_roc_group_enrolments (JAA patch 2026-04-20)
+    // Flat schema designed as a staging-object inbox for SF: every column
+    // maps 1:1 to a field on the target SF custom object. No `relate => true`
+    // because target is a staging table, not a normalized SF model — SF has
+    // its own downstream logic to validate and dispatch these rows.
+    'get_roc_group_enrolments' => [
+        // Row identity + Myddleware metadata
+        'id' => ['label' => 'Row ID (groups_members.id)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
+        'external_id' => ['label' => 'External ID (userid_courseid — SF dedup key)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
+        'timemodified' => ['label' => 'Time modified (group joined_at)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
+
+        // User
+        'user_id' => ['label' => 'User ID', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
+        'user_username' => ['label' => 'User Username', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_idnumber' => ['label' => 'User ID Number (often DNI)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_firstname' => ['label' => 'User First Name', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_lastname' => ['label' => 'User Last Name', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_email' => ['label' => 'User Email', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_phone1' => ['label' => 'User Phone 1', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_phone2' => ['label' => 'User Phone 2', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_address' => ['label' => 'User Address', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_city' => ['label' => 'User City', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_country' => ['label' => 'User Country (ISO code)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_timezone' => ['label' => 'User Timezone', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_lang' => ['label' => 'User Lang', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_institution' => ['label' => 'User Institution', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_department' => ['label' => 'User Department', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_description' => ['label' => 'User Description (bio, Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_firstaccess' => ['label' => 'User First Access', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_lastaccess' => ['label' => 'User Last Access', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_timecreated' => ['label' => 'User Created', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_auth' => ['label' => 'User Auth Method', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_confirmed' => ['label' => 'User Confirmed', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+
+        // Course (metadata only)
+        'course_id' => ['label' => 'Course ID', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
+        'course_fullname' => ['label' => 'Course Full Name (Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'course_shortname' => ['label' => 'Course Short Name', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'course_idnumber' => ['label' => 'Course ID Number', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'course_startdate' => ['label' => 'Course Start Date', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'course_visible' => ['label' => 'Course Visible', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+
+        // Group (metadata only)
+        'group_id' => ['label' => 'Group ID', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 1],
+        'group_name' => ['label' => 'Group Name (Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'group_idnumber' => ['label' => 'Group ID Number (SF Group ID)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'group_description' => ['label' => 'Group Description (Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'group_joined_at' => ['label' => 'Group Joined At', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+
+        // Enrolment context (always self/active here)
+        'enrol_method' => ['label' => 'Enrol Method (always self)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'enrol_timecreated' => ['label' => 'Enrol Created', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'enrol_timestart' => ['label' => 'Enrol Start', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'enrol_timeend' => ['label' => 'Enrol End', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+
+        // 10 user custom profile fields (hardcoded JAA list)
+        'user_cf_nacimiento' => ['label' => 'CF Nacimiento (Date of birth)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_arg' => ['label' => 'CF ARG', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_genero' => ['label' => 'CF Genero (Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_roc' => ['label' => 'CF ROC', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_residencia' => ['label' => 'CF Residencia (Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_mex' => ['label' => 'CF MEX', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_ury' => ['label' => 'CF URY', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_col' => ['label' => 'CF COL', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_per' => ['label' => 'CF PER', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'user_cf_sf_contact_id' => ['label' => 'CF SF Contact ID', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+    ],
 ];

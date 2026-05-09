@@ -46,6 +46,9 @@ class moodle extends solution
         'groups' => ['id', 'timemodified'],
         'roc_groups' => ['id', 'timemodified'],
         'group_members' => ['id', 'groupid', 'userid', 'timeadded'],
+        // JAA 2026-04-20: new source module for SF staging-object inbox pattern.
+        // `id` = groups_members.id (Moodle internal PK). `timemodified` = groups_members.timeadded.
+        'get_roc_group_enrolments' => ['id', 'timemodified'],
     ];
 
     protected array $FieldsDuplicate = [
@@ -142,6 +145,8 @@ class moodle extends solution
                     'groups' => 'Groups',
 					'group_members' => 'Group members',
                     'roc_groups' => 'ROC Groups (with customfields)',
+                    // JAA 2026-06-10: new group members (any enrol method) in flagged groups, for ROC 5.x.
+                    'get_roc_group_enrolments' => 'Get new group members by country',
                 ];
             }
 
@@ -757,6 +762,12 @@ class moodle extends solution
         if (!empty($param['ruleParams']['country_filter'])) {
             $parameters['country_filter'] = $param['ruleParams']['country_filter'];
         }
+        // JAA 2026-04-20: pass group_country_filter for get_roc_group_enrolments.
+        // Mirrors the country_filter pattern but filters on the GROUP custom field
+        // (component='core_group') rather than the USER profile field.
+        if (!empty($param['ruleParams']['group_country_filter'])) {
+            $parameters['group_country_filter'] = $param['ruleParams']['group_country_filter'];
+        }
         return $parameters;
     }
 
@@ -1012,6 +1023,25 @@ class moodle extends solution
                 "name" => "country_filter",
                 "type" => "option",
                 "label" => "Country filter (user profile field)",
+                "required" => true,
+                "option" => [
+                    "arg" => "ARG - Argentina",
+                    "roc" => "ROC - Americas Regional Operating Center",
+                    "mex" => "MEX - México",
+                    "ury" => "URY - Uruguay",
+                    "col" => "COL - Colombia",
+                    "per" => "PER - Perú",
+                ],
+            ];
+        }
+        // JAA 2026-04-20: expose group_country_filter for get_roc_group_enrolments.
+        // Separate option from country_filter above so rule configuration is unambiguous.
+        if ("source" === $type && "get_roc_group_enrolments" === $module) {
+            $params[] = [
+                "id" => "group_country_filter",
+                "name" => "group_country_filter",
+                "type" => "option",
+                "label" => "Group country filter (group custom field)",
                 "required" => true,
                 "option" => [
                     "arg" => "ARG - Argentina",
