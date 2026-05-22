@@ -140,6 +140,7 @@ class moodle extends solution
                     'get_quiz_attempts' => 'Get quiz attempts',
                     'groups' => 'Groups',
 					'group_members' => 'Group members',
+                    'roc_groups' => 'ROC Groups (with customfields)',
                 ];
             }
 
@@ -547,7 +548,7 @@ class moodle extends solution
 				$row[$custom] = '';
 			}
 		}
-		$attributeValue = (in_array($param['module'], ['courses','groups']) ? 'valueraw' : 'value');
+		$attributeValue = (in_array($param['module'], ['courses','groups','roc_groups']) ? 'valueraw' : 'value');
 		foreach ($data as $field) {
 			// Get all the requested fields
 			if (array_search($field->attributes()->__toString(), $param['fields']) !== false) {
@@ -683,6 +684,8 @@ class moodle extends solution
                 return 'local_myddleware_get_courses_by_date';
             } elseif ('groups' == $param['module']) {
                 return 'local_myddleware_get_groups_by_date';
+            } elseif ('roc_groups' == $param['module']) {
+                return 'local_myddleware_get_roc_groups_by_date';
             } elseif ('group_members' == $param['module']) {
                 return 'local_myddleware_get_group_members_by_date';
             }
@@ -798,7 +801,7 @@ class moodle extends solution
             return explode(',',$this->paramConnexion['course_custom_fields']);
         }
         if (
-                $param['module'] == 'groups'
+                in_array($param['module'], ['groups', 'roc_groups'])
             AND !empty($this->paramConnexion['group_custom_fields'])
         ) {
             return explode(',',$this->paramConnexion['group_custom_fields']);
@@ -822,7 +825,7 @@ class moodle extends solution
 		) {
 			$customFields = explode(',',$this->paramConnexion['course_custom_fields']);
 		} elseif (
-				$module == 'groups'
+				in_array($module, ['groups', 'roc_groups'])
 			AND !empty($this->paramConnexion['group_custom_fields'])
 		) {
 			$customFields = explode(',',$this->paramConnexion['group_custom_fields']);
