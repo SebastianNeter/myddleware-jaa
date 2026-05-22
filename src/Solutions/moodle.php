@@ -44,6 +44,7 @@ class moodle extends solution
         'get_user_grades' => ['id', 'timemodified'],
         'get_quiz_attempts' => ['id', 'timemodified'],
         'groups' => ['id', 'timemodified'],
+        'roc_groups' => ['id', 'timemodified'],
         'group_members' => ['id', 'groupid', 'userid', 'timeadded'],
     ];
 
