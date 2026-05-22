@@ -41,6 +41,7 @@ class salesforce extends solution {
 										'Lead' => array('Email','LastName'),
 										'Account' => array('Email', 'Name'),
 										'Junction_Curso_Contacto__c' => array('Completion_Key_Ext__c'),
+										'Grupos_LMS__c' => array('Id_de_grupo_en_LMS__c'),
 																'default' => array('Name')
 									  );
 
