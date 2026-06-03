@@ -211,8 +211,9 @@ class moodle extends solution
 			if (
 					$param['call_type'] == 'history'
 				AND (
-						$param['module'] == 'manual_unenrol_users' // Don't want a no_send for manual_unenrol_users
-					OR  $param['module'] == 'core_user_set_user_preferences' 
+						$param['module'] == 'group_members' // Skip verify-before-update: local_myddleware_get_group_members_by_date has no id filter and returns up to 100 records ("100 duplicates" error). core_group_add_group_members is idempotent so the send proceeds safely.
+					OR  $param['module'] == 'manual_unenrol_users' // Don't want a no_send for manual_unenrol_users
+					OR  $param['module'] == 'core_user_set_user_preferences'
 					OR (
 							$param['module'] == 'manual_enrol_users'
 						AND (
