@@ -441,11 +441,20 @@ $moduleFields = [
         'group_description' => ['label' => 'Group Description (Spanish)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
         'group_joined_at' => ['label' => 'Group Joined At', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
 
-        // Enrolment context (always self/active here)
-        'enrol_method' => ['label' => 'Enrol Method (always self)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        // Enrolment context (active enrolments only)
+        'enrol_method' => ['label' => 'Enrol Method (manual, self, cohort, ...)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
         'enrol_timecreated' => ['label' => 'Enrol Created', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
         'enrol_timestart' => ['label' => 'Enrol Start', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
         'enrol_timeend' => ['label' => 'Enrol End', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+
+        // Role on the course (empty when no role assignment found)
+        'role_id' => ['label' => 'Role ID on course', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'role_shortname' => ['label' => 'Role Shortname (student, teacher, ...)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+
+        // Completion snapshot at detection time (required activities only)
+        'completion_percentage' => ['label' => 'Completion Percentage (required activities)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'completion_completed' => ['label' => 'Completed Required Activities', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
+        'completion_total' => ['label' => 'Total Required Activities', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
 
         // 10 user custom profile fields (hardcoded JAA list)
         'user_cf_nacimiento' => ['label' => 'CF Nacimiento (Date of birth)', 'type' => 'varchar(255)', 'type_bdd' => 'varchar(255)', 'required' => 0],
