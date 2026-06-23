@@ -768,6 +768,10 @@ class moodle extends solution
         if (!empty($param['ruleParams']['group_country_filter'])) {
             $parameters['group_country_filter'] = $param['ruleParams']['group_country_filter'];
         }
+        // JAA: pass ws_limit for paged draining of get_roc_group_enrolments.
+        if (!empty($param['ruleParams']['ws_limit'])) {
+            $parameters['ws_limit'] = $param['ruleParams']['ws_limit'];
+        }
         return $parameters;
     }
 
