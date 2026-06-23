@@ -772,6 +772,10 @@ class moodle extends solution
         if (!empty($param['ruleParams']['ws_limit'])) {
             $parameters['ws_limit'] = $param['ruleParams']['ws_limit'];
         }
+        // JAA: pass skip_completion to speed up the historical backfill of get_roc_group_enrolments.
+        if (!empty($param['ruleParams']['skip_completion'])) {
+            $parameters['skip_completion'] = $param['ruleParams']['skip_completion'];
+        }
         return $parameters;
     }
 
